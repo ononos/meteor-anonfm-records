@@ -62,6 +62,8 @@ Files.allow({
   update: isAdminById,
 });
 
-Files._ensureIndex({timestamp: 1, name: 1});
-Files._ensureIndex({dj: 1});
-//Files._ensureIndex({timestamp: 1, name: 1});
+if (Meteor.isServer) {
+  Files._ensureIndex({timestamp: 1, name: 1});
+  Files._ensureIndex({dj: 1});
+  //Files._ensureIndex({timestamp: 1, name: 1});
+}
