@@ -4,6 +4,7 @@ Template.records.events({
   }
 });
 
+/* record row */
 Template.fileRow.helpers({
   created: function() {
     if (typeof this.t !== 'undefined') {
@@ -39,5 +40,29 @@ Template.fileRow.rendered = function () {
 Template.fileRow.events({
   'click [data-action="setDate"]': function(e, t) {
     Session.set("filter-date", this.t);
+  }
+});
+
+/*
+
+ Source.
+
+*/
+Template.fileSource.helpers({
+  fileUrl: function() {
+    var url = this.url;         // maybe record's source have "url"?
+    // if not, get it from source's "url" + filename
+    // Source url must end "/"
+    if (!url) {
+      url = Sources.findOne(this.id).url + Template.parentData(1).fname;
+    }
+    return url;
+  },
+
+  // Source title
+  title: function() {
+    var source = Sources.findOne(this.id);
+    console.log(this.id, source);
+    return (source && source.title) ? source.title : "Unknown";
   }
 });

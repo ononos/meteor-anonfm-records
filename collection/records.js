@@ -2,7 +2,7 @@ var schema = {};
 
 schema.source = new SimpleSchema({
   id: {                         // foreign key to Sources._id
-    type: String
+    type: Meteor.Collection.ObjectID
   },
   url: {
     type: String,
