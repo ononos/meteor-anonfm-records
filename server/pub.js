@@ -3,10 +3,11 @@
 Meteor.publish("files", function(timefrom, dj) {
   var query = {};
 
-  if (timefrom)
-    query.t = {$lte: timefrom};
   if (dj && dj !== "!all")
     query.dj = dj;
+
+  if (timefrom)
+    query.t = {$lte: timefrom};
 
   if (!isAdmin(this.userId))
     query.rm = {$ne: true};
@@ -16,12 +17,15 @@ Meteor.publish("files", function(timefrom, dj) {
 });
 
 Meteor.publish("sources", function() {
-  var query = {};
+  var query = {},
+      options = {};
 
-  if (!isAdmin(this.userId))
+  if (!isAdmin(this.userId)) {
     query.rm = {$ne: true};
+    options.fields = {url: 1, title: 1};
+  }
 
-  return Sources.find(query);
+  return Sources.find(query, options);
 });
 
 Meteor.methods({

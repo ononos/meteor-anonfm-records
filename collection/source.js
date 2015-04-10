@@ -6,20 +6,22 @@ var schema = new SimpleSchema({
   url: {
     type: String,
   },
+  title: {
+    type: String
+  },
   rm: {
     type: Boolean,
     optional: true
   },
-  lastError: {
-    type: String
-  },
   update: {                     // update delay in seconds
-    type: Number
+    type: Number,
+    optional: true,
   },
-  lastUpdated: {
-    type: Date
+  lastUpdated: {                // when updated
+    type: Date,
+    optional: true,
   },
-  msg: {
+  msg: {                        // last error or "ok" when update
     type: String
   }
 });
