@@ -309,6 +309,10 @@
 			});
 		},
 
+                visible: function() {
+                        return this.isVisible;
+                },
+
 		hide: function (e) {
 			if (!this.isVisible) return;
 			if (this.isInline) return;
