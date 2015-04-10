@@ -1,0 +1,22 @@
+<template name="filter">
+    <div class="form-group">
+      <label>Dj</label>
+      {{> DjListSelect}}
+    </div>
+    <div class="form-group">
+      {{>datePick}}
+    </div>
+</template>
+
+<template name="DjListSelect">
+  <select></select>
+</template>
+
+<template name="datePick">
+  <div class="input-group date">
+    <input id="datePick" type='text' class="form-control" />
+    <span class="input-group-addon">
+      <span class="fa fa-calendar"></span>
+    </span>
+  </div>
+</template>

@@ -13,57 +13,68 @@ schema.source = new SimpleSchema({
 });
 
 schema.main = new SimpleSchema({
+  // schedule:
+  isSch: {
+    type: Boolean,
+  },
+  schedule: {                   // schedule name
+    type: String,
+  },
+  schTime: {                    // REAL TIMESTAMP of schedule
+    type: Date,
+  },
+  // schedule and record:
   addedAt: {
     type: Date
   },
-  timestamp: {
+  t: { // time stamp of records or schedule (+15 minutes because dj may start before schedul started)
     type: Date
   },
   dj: {
     type: String
   },
-  name: {                       // file name
-    type: String
+  duration: {
+    type: Number,
+  },
+  rm: {                         // just hide (remove from view)
+    type: Boolean
+  },
+  // record:
+  fname: {                      // file name if record
+    type: String,
   },
   size: {                       // file size
     type: Number
   },
   sources: {
     type: [schema.source],
-    optional: true,
   },
   bitrate: {
     type: Number
   },
-  duration: {
-    type: Number,
-  },
   hasPreview: {
-    type: Boolean
-  },
-
-  rm: {                         // just hide (remove from view)
     type: Boolean
   },
 });
 
-Files = new Meteor.Collection('files');
-Files.attachSchema(schema.main);
+Records = new Meteor.Collection('files');
+Records.attachSchema(schema.main);
 
 
-Files.deny({
+Records.deny({
   update: function(userId, post, fieldNames) {
     // deny the update if it contains something other than the following fields
     return (_.without(fieldNames, 'rm').length > 0);
   }
 });
 
-Files.allow({
+Records.allow({
   update: isAdminById,
 });
 
 if (Meteor.isServer) {
-  Files._ensureIndex({timestamp: 1, name: 1});
-  Files._ensureIndex({dj: 1});
-  //Files._ensureIndex({timestamp: 1, name: 1});
+  Records._ensureIndex({t: 1, dj: 1});
+  Records._ensureIndex({dj: 1});
+  Records._ensureIndex({isSch: 1});
+  //Records._ensureIndex({timestamp: 1, name: 1});
 }

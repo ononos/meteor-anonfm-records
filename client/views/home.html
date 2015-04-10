@@ -1,3 +1,37 @@
-<template name="home">
-  {{> DjListSelect}}
+<template name="records">
+
+  {{> filter}}
+
+  <table class="table records">
+    <thead>
+      <tr>
+        <th class="col-md-2">Дата</th><th class="col-md-3">Диджей</th><th class="col-md-7">Запись</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each this}}
+        {{> fileRow}}
+      {{/each}}
+    </tbody>
+  </table>
+</template>
+
+<template name="fileRow">
+  {{#if isSch}}
+    <tr class="schedule">
+      <td class="date">
+        {{created}}
+      </td>
+      <td class="dj">{{dj}}</td>
+      <td>{{schedule}}</td>
+    </tr>    
+  {{else}}
+  <tr class="record {{scheduledClass}}">
+    <td class="date">
+      {{created}}
+    </td>
+    <td class="dj">{{dj}}</td>
+    <td>{{fname}}</td>   
+  </tr>
+  {{/if}}
 </template>
