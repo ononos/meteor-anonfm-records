@@ -11,6 +11,18 @@
     <tbody>
       {{#each this}}
         {{> fileRow}}
+      {{else}}
+        <tr>
+          <td colspan="4">
+            <div class="alert">
+              <i class="fa fa-exclamation-triangle"></i>
+              Ненайдено записей,
+              <button class="btn btn-link" data-action="setDateNow">
+                кликни чтобы установить теперешнее время.
+              </button>
+            </div>
+          </td>
+        </tr>
       {{/each}}
     </tbody>
   </table>

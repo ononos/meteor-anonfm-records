@@ -1,3 +1,9 @@
+Template.records.events({
+  'click [data-action="setDateNow"]': function() {
+    Session.set("filter-date", new Date());
+  }
+});
+
 Template.fileRow.helpers({
   created: function() {
     if (typeof this.t !== 'undefined') {
