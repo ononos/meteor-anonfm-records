@@ -7,8 +7,21 @@ Meteor.publish("files", function(timefrom, dj) {
     query.t = {$lte: timefrom};
   if (dj && dj !== "!all")
     query.dj = dj;
+
+  if (!isAdmin(this.userId))
+    query.rm = {$ne: true};
+
   console.log(query);
   return Records.find(query, {sort: {t: -1 }, limit: 50});
+});
+
+Meteor.publish("sources", function() {
+  var query = {};
+
+  if (!isAdmin(this.userId))
+    query.rm = {$ne: true};
+
+  return Sources.find(query);
 });
 
 Meteor.methods({
