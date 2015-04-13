@@ -17,7 +17,7 @@ Meteor.startup(function () {
       return Meteor.subscribe('files', Session.get('filter-date'), this.params.dj);
     },
     data: function() {
-      return Records.find({},{sort: {timestamp: -1}});
+      return Records.find({},{sort: {t: -1}});
     }
   });
 
