@@ -1,6 +1,9 @@
-/*
- Суть такова: установить сессионные переменные "filter-date" "filter-dj"
-*/
+
+Template.filter.events({
+  'click [data-action="reset"]': function(e, t) {
+    Router.go('records', {dj: '!all'});
+  }
+});
 
 var DjList = new ReactiveVar([]);
 Template.DjListSelect.rendered = function() {
@@ -25,7 +28,6 @@ Template.DjListSelect.rendered = function() {
       if (dj !== Router.current().params.dj) {
         Router.go('records', {dj: dj});
       }
-      // console.log('end');
     });
     select.val(Router.current().params.dj).trigger('change');
   }
@@ -43,14 +45,6 @@ Template.DjListSelect.rendered = function() {
   }
 };
 
-// Template.filter.events({
-//   'submit form': function(e, t) {
-//     e.preventDefault();
-//     // var datepicker = t.$('#datePick').value();
-//     // console.log(datepicker);    
-//   }
-// });
-
 Template.datePick.rendered = function() {
   var datepicker = this.$('.date').datetimepicker({
     language: 'ru',
@@ -66,7 +60,6 @@ Template.datePick.rendered = function() {
       var self = $(this);
       Meteor.defer(function() {
         if (!self.datetimepicker('visible')) {
-          console.log('change', e);
           Session.set("filter-date", e.date);
         }
 
