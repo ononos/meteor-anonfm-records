@@ -12,12 +12,18 @@ Template.fileRow.helpers({
     } else
       return '';
   },
+
   scheduledClass: function() {
     var prevSchedule = Records.findOne({t: {$lte: this.t}, isSch: true});
     return (prevSchedule &&
             prevSchedule.t.getTime() + prevSchedule.duration * 1000 >
             this.t.getTime()) ? "scheduled" : "";
   },
+
+  playingClass: function() {
+    return this._id === currentPlaingFileId.get() ? 'plaing' : '';
+  },
+
   durationHHMM: function() {
     var duration = this.duration;
     if (_.isUndefined(duration))
@@ -47,22 +53,66 @@ Template.fileRow.events({
 
  Source.
 
-*/
+ */
+
+var uppod,
+    currentUrlPlaing = new ReactiveVar(""),
+    isPlaying = new ReactiveVar(false),     // true on events
+    currentPlaingFileId = new ReactiveVar("");
+
+PlayUrl = function(recordId, url) {
+  currentUrlPlaing.set(url);
+  currentPlaingFileId.set(recordId);
+
+  if (uppod)
+    uppod = null;
+
+  uppod = new Uppod({
+    m: "audio",
+    uid: "player",              // id defined in ./layout.html
+    file: url
+  });
+  var el = document.getElementById('player');
+  el.addEventListener("play", function() {
+    isPlaying.set(true);
+  });
+  el.addEventListener("pause", function() {
+    isPlaying.set(false);
+  });
+  el.addEventListener("stop", function() {
+    isPlaying.set(false);
+  });
+  uppod.Play();
+  isPlaying.set(true);
+};
+
+function urlOfSource () {
+  var url = this.url;         // maybe record's source have "url"?
+  // if not, get it from source's "url" + filename
+  // Source url must end "/"
+  if (!url) {
+    url = Sources.findOne(this.id).url + Template.parentData(1).fname;
+  }
+  return url;
+}
+
 Template.fileSource.helpers({
-  fileUrl: function() {
-    var url = this.url;         // maybe record's source have "url"?
-    // if not, get it from source's "url" + filename
-    // Source url must end "/"
-    if (!url) {
-      url = Sources.findOne(this.id).url + Template.parentData(1).fname;
-    }
-    return url;
-  },
+  fileUrl: urlOfSource,
 
   // Source title
   title: function() {
     var source = Sources.findOne(this.id);
-    console.log(this.id, source);
     return (source && source.title) ? source.title : "Unknown";
+  },
+
+  playing: function() {
+    return urlOfSource.call(this) === currentUrlPlaing.get() && isPlaying.get();
+  }
+});
+
+Template.fileSource.events({
+  'click [data-action="play"]': function(e, t) {
+    var record = Template.parentData(1);
+    PlayUrl(record._id, urlOfSource.call(this));
   }
 });

@@ -43,7 +43,7 @@
       <td>{{schedule}}</td>
     </tr>    
   {{else}}
-  <tr class="record {{scheduledClass}}">
+  <tr class="record {{scheduledClass}} {{playingClass}}">
     <td class="date" nowrap>
       <span data-action="setDate">{{created}}</span>
     </td>
@@ -66,5 +66,10 @@
 </template>
 
 <template name="fileSource">
-  <a href="{{fileUrl}}">[{{title}}]</a>
+  {{#if playing}}
+    <i data-play="pause" class="fa fa-fw fa-pause"></i>
+  {{else}}
+    <i data-action="play" class="fa fa-fw fa-play"></i>
+  {{/if}}
+    <a href="{{fileUrl}}">[{{title}}]</a>
 </template>

@@ -21,10 +21,16 @@ td.date {
     color: green;
 }
 
-tr.schedule {
-    font-weight: bold;
-    background-color: #ddd;
-    border: 1px solid #ccc;
+tr {
+    &.schedule {
+        font-weight: bold;
+        background-color: #ddd;
+        border: 1px solid #ccc;
+    }
+    &.plaing {
+        background-color: #8f8;
+        border: 2px solid #000;
+    }
 }
 
 td.dj a {
@@ -39,7 +45,7 @@ td.duration {
 }
 
 .player {
-    max-height: 85px;
+    max-height: 35px;
     margin-bottom: 15px;
     margin-top: 15px;
 }
