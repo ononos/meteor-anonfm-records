@@ -1,7 +1,12 @@
 var uppod_players;
 var uppodstyle = '';
 
-function Uppod(loadvars) {
+/*
+ This is hack,  dont want rewrite much this unit  because of in future
+ may need update, Uppod wrote in not closure friendly style.
+*/
+
+Uppod = window.Uppod = function(loadvars) {
     var _this = this;
     var canvasObjs = [];
     var vars;
