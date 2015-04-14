@@ -29,7 +29,10 @@
 </template>
 
 <template name="fileRow">
-  <tr class="{{addClassIf isSch "schedule" "record"}} {{addClassIf isScheduled "scheduled"}}">
+  <tr class="{{addClassIf2 isSch "schedule" "record"}}
+             {{addClassIf isScheduled "scheduled"}}
+             {{addClassIf playingIt "playing"}}">
+
     <td class="date" nowrap>
       <span data-action="setDate" class="{{addClassIf filter_eq_date "current-date"}}">{{created}}</span>
     </td>

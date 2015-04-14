@@ -29,7 +29,10 @@ Template.fileRow.helpers({
   },
 
   filter_eq_date: function() {
-    return this.t.getTime() === Session.get('filter-date').getTime();
+    var date = Session.get('filter-date');
+    if (_.isUndefined(date))
+      return false;
+    return this.t.getTime() === date.getTime();
   },
 
   durationHHMM: function() {
