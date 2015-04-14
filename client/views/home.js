@@ -27,7 +27,8 @@ Template.fileRow.helpers({
   },
 
   playingIt: function() {
-    return this._id === currentPlaingFileId.get();
+    var curPlayId = Session.get('current-playing');
+    return curPlayId && this._id._str == curPlayId._str;
   },
 
   filter_eq_date: function() {
@@ -71,11 +72,10 @@ Template.fileRow.events({
 var uppod,
     currentUrlPlaing = new ReactiveVar(""),
     isPlaying = new ReactiveVar(false),     // true on events
-    currentPlaingFileId = new ReactiveVar("");
 
 PlayUrl = function(recordId, url) {
   currentUrlPlaing.set(url);
-  currentPlaingFileId.set(recordId);
+  Session.set('current-playing', recordId);
 
   if (!uppod)
     uppod = null;
