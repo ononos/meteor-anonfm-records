@@ -8,7 +8,7 @@ Template.records.events({
 Template.fileRow.helpers({
   created: function() {
     if (typeof this.t !== 'undefined') {
-      return moment(this.t).format("YYYY-MM-DD hh:mm");
+      return moment(this.t).format("YYYY-MM-DD HH:mm");
     } else
       return '';
   },
