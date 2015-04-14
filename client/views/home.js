@@ -7,9 +7,11 @@ Template.records.events({
 /* record row */
 Template.fileRow.helpers({
   created: function() {
-    if (typeof this.t !== 'undefined') {
+    if (!_.isUndefined(this.schTime))
+      return moment(this.schTime).format("YYYY-MM-DD HH:mm");
+    else if (!_.isUndefined(this.t))
       return moment(this.t).format("YYYY-MM-DD HH:mm");
-    } else
+    else
       return '';
   },
 
