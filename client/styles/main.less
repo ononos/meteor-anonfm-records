@@ -1,3 +1,18 @@
+/*
+  mixings
+  */
+.animation(@animation) {
+  -webkit-animation: @animation;
+       -o-animation: @animation;
+          animation: @animation;
+}
+
+/**********************************
+
+Styles
+
+***********************************/
+
 table .records{
     border-collapse: collapse;
     border: 1px solid #ccc;
@@ -21,15 +36,19 @@ td.date {
     color: green;
 }
 
+.current-date {
+    color: #000;
+}
+
 tr {
     &.schedule {
         font-weight: bold;
         background-color: #ddd;
         border: 1px solid #ccc;
     }
-    &.plaing {
-        background-color: #8f8;
+    &.playing {
         border: 2px solid #000;
+        background-color: #eae;
     }
 }
 
