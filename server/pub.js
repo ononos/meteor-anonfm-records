@@ -1,7 +1,17 @@
 // publication
 
-Meteor.publish("files", function(timefrom, dj) {
+function checkLimit(limit) {
+  if (limit < 0) limit = -limit;
+  if (limit > 50 || !limit)
+    limit = 50;
+  
+  return limit;
+}
+
+Meteor.publish("files-before-ts", function(timefrom, dj, limit) {
   var query = {};
+
+  limit = checkLimit(limit);
 
   if (dj && dj !== "!all")
     query.dj = dj;
@@ -12,8 +22,26 @@ Meteor.publish("files", function(timefrom, dj) {
   if (!isAdmin(this.userId))
     query.rm = {$ne: true};
 
-  console.log(query);
-  return Records.find(query, {sort: {t: -1 }, limit: 50});
+  console.log(query, {sort: {t: -1 }, limit: limit});
+  return Records.find(query, {sort: {t: -1 }, limit: limit});
+});
+
+Meteor.publish("files-after-ts", function(timefrom, dj, limit) {
+  var query = {};
+
+  limit = checkLimit(limit);
+
+  if (dj && dj !== "!all")
+    query.dj = dj;
+
+  if (timefrom)
+    query.t = {$gt: timefrom};
+
+  if (!isAdmin(this.userId))
+    query.rm = {$ne: true};
+
+  console.log(query, {sort: {t: 1 }, limit: limit});
+  return Records.find(query, {sort: {t: 1 }, limit: limit});
 });
 
 Meteor.publish("sources", function() {
