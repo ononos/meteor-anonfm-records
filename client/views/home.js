@@ -13,21 +13,23 @@ Template.fileRow.helpers({
       return '';
   },
 
-  scheduledClass: function() {
+  isScheduled: function() {
+    if (this.isSch)
+      return false;
     var prevSchedule = Records.findOne({t: {$lte: this.t}, isSch: true});
     return (prevSchedule &&
             // we found scheduled that was before this record (and btw, t is -15 minutes),
             // now check is record started before this schedule ended (and +15 minutes, so +30)
             prevSchedule.t.getTime() + (30 * 60 + prevSchedule.duration) * 1000 >
-            this.t.getTime()) ? "scheduled" : "";
+            this.t.getTime());
   },
 
-  playingClass: function() {
-    return this._id === currentPlaingFileId.get() ? 'plaing' : '';
+  playingIt: function() {
+    return this._id === currentPlaingFileId.get();
   },
 
-  dateClass: function() {
-    return (this.t.getTime() === Session.get('filter-date').getTime()) ? 'current-date' : '';
+  filter_eq_date: function() {
+    return this.t.getTime() === Session.get('filter-date').getTime();
   },
 
   durationHHMM: function() {
@@ -70,7 +72,7 @@ PlayUrl = function(recordId, url) {
   currentUrlPlaing.set(url);
   currentPlaingFileId.set(recordId);
 
-  if (uppod)
+  if (!uppod)
     uppod = null;
 
   uppod = new Uppod({

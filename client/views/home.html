@@ -29,23 +29,9 @@
 </template>
 
 <template name="fileRow">
-  {{#if isSch}}
-    <tr class="schedule">
-      <td class="date " nowrap>
-        <span data-action="setDate" class="{{dateClass}}">{{created}}</span>
-      </td>
-      <td class="dj">
-        <a href="{{pathFor route="records"}}">
-        {{dj}}
-        </a>
-      </td>
-      <td class="duration">{{durationHHMM}}</td>
-      <td>{{schedule}}</td>
-    </tr>    
-  {{else}}
-  <tr class="record {{scheduledClass}} {{playingClass}}">
+  <tr class="{{addClassIf isSch "schedule" "record"}} {{addClassIf isScheduled "scheduled"}}">
     <td class="date" nowrap>
-      <span data-action="setDate" class="{{dateClass}}">{{created}}</span>
+      <span data-action="setDate" class="{{addClassIf filter_eq_date "current-date"}}">{{created}}</span>
     </td>
     <td class="dj">
       <a href="{{pathFor route="records"}}">
@@ -54,15 +40,18 @@
     </td>
     <td class="duration">{{durationHHMM}}</td>
     <td>
-      {{fname}}
-      {{#each sources}}
-        {{#unless rm}}
-          {{>fileSource}}
-        {{/unless}}
-      {{/each}}
-    </td>   
-  </tr>
-  {{/if}}
+      {{#if isSch}}
+        {{schedule}}
+      {{else}}
+        {{fname}}
+        {{#each sources}}
+          {{#unless rm}}
+            {{>fileSource}}
+          {{/unless}}
+        {{/each}}
+      {{/if}}
+    </td>
+  </tr>    
 </template>
 
 <template name="fileSource">
