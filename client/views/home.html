@@ -32,7 +32,7 @@
   {{#if isSch}}
     <tr class="schedule">
       <td class="date " nowrap>
-        <span data-action="setDate">{{created}}</span>
+        <span data-action="setDate" class="{{dateClass}}">{{created}}</span>
       </td>
       <td class="dj">
         <a href="{{pathFor route="records"}}">
@@ -45,7 +45,7 @@
   {{else}}
   <tr class="record {{scheduledClass}} {{playingClass}}">
     <td class="date" nowrap>
-      <span data-action="setDate">{{created}}</span>
+      <span data-action="setDate" class="{{dateClass}}">{{created}}</span>
     </td>
     <td class="dj">
       <a href="{{pathFor route="records"}}">

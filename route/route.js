@@ -14,7 +14,14 @@ Meteor.startup(function () {
   Router.route('/records/:dj', {
     name: 'records',
     waitOn: function() {
-      return Meteor.subscribe('files', Session.get('filter-date'), this.params.dj);
+      var direction   = Session.get('filter-ts-direction') || false,
+          itemsAfter  = direction ? 47 : 3,
+          itemsBefore = 50 - itemsAfter,
+          ts          = Session.get('filter-date');
+
+      return [ Meteor.subscribe('files-before-ts', ts, this.params.dj, itemsBefore),
+               Meteor.subscribe('files-after-ts', ts, this.params.dj, itemsAfter)
+             ];
     },
     data: function() {
       return Records.find({},{sort: {t: -1}});

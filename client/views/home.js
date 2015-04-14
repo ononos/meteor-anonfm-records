@@ -26,6 +26,10 @@ Template.fileRow.helpers({
     return this._id === currentPlaingFileId.get() ? 'plaing' : '';
   },
 
+  dateClass: function() {
+    return (this.t.getTime() === Session.get('filter-date').getTime()) ? 'current-date' : '';
+  },
+
   durationHHMM: function() {
     var duration = this.duration;
     if (_.isUndefined(duration))
