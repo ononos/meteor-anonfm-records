@@ -1,0 +1,28 @@
+<template name="player">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="player" id="player"></div>
+    </div>
+  </div>
+  <div class="row">
+    {{>playerInfoBar currentId}}
+  </div>
+</template>
+
+<template name="playerInfoBar">
+  {{#if isReady}}
+    <div class="col-md-12 player-info">
+      <span class="filename">{{record.fname}}</span>
+      {{#with record}}
+        {{#each sources}}
+          {{#unless rm}}
+            {{>fileSource}}
+          {{/unless}}
+        {{/each}}
+      {{/with}}
+      <button class="btn btn-sm btn-default">
+        Перейти
+      </button>
+    </div>
+  {{/if}}
+</template>
