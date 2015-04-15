@@ -2,6 +2,8 @@
 Template.filter.events({
   'click [data-action="reset"]': function(e, t) {
     Router.go('records', {dj: '!all'});
+    Session.set("filter-date", undefined);
+    Session.set("filter-ts-direction", false);
   }
 });
 
@@ -61,6 +63,7 @@ Template.datePick.rendered = function() {
       Meteor.defer(function() {
         if (!self.datetimepicker('visible')) {
           Session.set("filter-date", e.date);
+          Session.set("filter-ts-direction", false);
         }
 
       });

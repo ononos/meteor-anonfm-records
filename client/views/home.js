@@ -1,6 +1,7 @@
 Template.records.events({
   'click [data-action="setDateNow"]': function() {
     Session.set("filter-date", new Date());
+    Session.set("filter-ts-direction", false);
   }
 });
 
@@ -28,7 +29,7 @@ Template.fileRow.helpers({
 
   playingIt: function() {
     var curPlayId = Session.get('current-playing');
-    return curPlayId && this._id._str == curPlayId._str;
+    return curPlayId && this._id._str === curPlayId._str;
   },
 
   filter_eq_date: function() {
@@ -59,7 +60,16 @@ Template.fileRow.rendered = function () {
 
 Template.fileRow.events({
   'click [data-action="setDate"]': function(e, t) {
+    var countBefore = Records.find({t: {$lte: this.t}}).count(),
+        countAfter = Records.find({t: {$gt: this.t}}).count(),
+        total = countBefore + countAfter;
+
     Session.set("filter-date", this.t);
+    Session.set("filter-ts-direction", 
+                total < 50 || // 50 - is max items that we may get by subscribtion
+                /*                 so if we have less, then we need scroll only to newer items */
+                ( countAfter <  // clicked it 20% top, scroll to newer, otherwise - older items
+                  countBefore - 0.8 * (countBefore + countAfter)));
   }
 });
 
