@@ -19,7 +19,7 @@ Template.fileRow.helpers({
   isScheduled: function() {
     if (this.isSch)
       return false;
-    var prevSchedule = Records.findOne({t: {$lte: this.t}, isSch: true}, {sort: {t: -1}});
+    var prevSchedule = Records.findOne({t: {$lt: this.t}, isSch: true}, {reactive: false, sort: {t: -1}});
     return (prevSchedule &&
             // we found scheduled that was before this record (and btw, t is -15 minutes),
             // now check is record started before this schedule ended (and +15 minutes, so +30)
@@ -33,12 +33,6 @@ Template.fileRow.helpers({
     return (prev &&
             prev.t.getTime() + 4 * 86400000 <
             this.t.getTime());
-  },
-
-  // return text duration between this and prev record
-  prevRecDistance: function() {
-    var prev = Records.findOne({t: {$lt: this.t}});
-    return moment.duration(moment(this.t).diff(prev.t)).humanize();
   },
 
   playingIt: function() {
@@ -85,6 +79,16 @@ Template.fileRow.events({
                 ( countAfter <  // clicked it 20% top, scroll to newer, otherwise - older items
                   countBefore - 0.8 * (countBefore + countAfter)));
   }
+});
+
+Template.largeDistance.helpers({
+
+  // return text duration between this and prev record
+  prevRecDistance: function() {
+    var prev = Records.findOne({t: {$lt: this.t}}, {sort: {t: -1}});
+    console.log("prevRecDistance");
+    return moment.duration(moment(this.t).diff(prev.t)).humanize();
+  },
 });
 
 /*

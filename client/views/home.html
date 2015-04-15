@@ -56,12 +56,16 @@
     </td>
   </tr>
   {{#if isLargeDistance}}
+    {{>largeDistance t=t}}
+  {{/if}}
+</template>
+
+<template name="largeDistance">
     <tr class="prev-record-is-far">
       <td colspan="4">
         ... И спустя {{prevRecDistance}} ...
       </td>
     </tr>
-  {{/if}}
 </template>
 
 <template name="fileSource">
