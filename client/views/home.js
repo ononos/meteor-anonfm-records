@@ -73,11 +73,7 @@ Template.fileRow.events({
         total = countBefore + countAfter;
 
     Session.set("filter-date", this.t);
-    Session.set("filter-ts-direction", 
-                total < 50 || // 50 - is max items that we may get by subscribtion
-                /*                 so if we have less, then we need scroll only to newer items */
-                ( countAfter <  // clicked it 20% top, scroll to newer, otherwise - older items
-                  countBefore - 0.8 * (countBefore + countAfter)));
+    Session.set("filter-ts-direction",  countAfter < countBefore -1);
   }
 });
 
