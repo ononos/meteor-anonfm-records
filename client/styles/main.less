@@ -15,11 +15,12 @@ Styles
 
 table .records{
     border-collapse: collapse;
-    border: 1px solid #ccc;
 }
 
 td {
-    border-bottom: 1px solid #ccc;
+    // border-bottom: 1px solid #ccc;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 td.date {
@@ -30,6 +31,7 @@ td.date {
 
 [data-action="setDate"]:hover {
     text-decoration: underline;
+    cursor: pointer;
 }
 
 .scheduled .date{
@@ -46,10 +48,35 @@ tr {
         background-color: #ddd;
         border: 1px solid #ccc;
     }
+    &.record {
+        border: 1px solid #ccc;
+    }
     &.playing {
         border: 2px solid #000;
         background-color: #eae;
     }
+    &.prev-record-is-far {
+        td {
+            padding-top: 10px;
+            padding-bottom: 5px;
+            font-style: italic;
+            font-family: Times;
+            font-size: larger;
+        }
+    }
+}
+
+.play-btn {
+    padding-left: 5px;
+    padding-right: 5px;
+    cursor: pointer;
+    &:hover {
+        border: 1px outset #ccc;
+    }
+}
+
+.player-info {
+    
 }
 
 td.dj a {
