@@ -15,8 +15,9 @@ Meteor.startup(function () {
     name: 'records',
     waitOn: function() {
       var direction   = Session.get('filter-ts-direction') || false,
-          itemsAfter  = direction ? 47 : 3, // 3 items - scroll margin
-          itemsBefore = 50 - itemsAfter,
+          itemsAfter  = direction ? CFG.MaxRecs - CFG.ScrollMargin
+                                  : CFG.ScrollMargin,
+          itemsBefore = CFG.MaxRecs - itemsAfter,
           ts          = Session.get('filter-date');
 
       return [ Meteor.subscribe('files-before-ts', ts, this.params.dj, itemsBefore),

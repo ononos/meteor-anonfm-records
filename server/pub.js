@@ -2,8 +2,8 @@
 
 function checkLimit(limit) {
   if (limit < 0) limit = -limit;
-  if (limit > 50 || !limit)
-    limit = 50;
+  if (limit > CFG.MaxRecs || !limit)
+    limit = CFG.MaxRecs;
   
   return limit;
 }
