@@ -16,11 +16,7 @@
       {{#with currentRecord}}
         {{>btnThisDj dj=dj}}
         <span class="filename">{{fname}}</span>
-        {{#each sources}}
-          {{#unless rm}}
-            {{>fileSource}}
-          {{/unless}}
-        {{/each}}
+        {{>recordSources}}
       {{/with}}
     </div>
     <div class="col-md-12">
@@ -28,12 +24,8 @@
       {{#with nextRecord}}
         {{dj}}
         <span class="filename">{{fname}}</span>
-        {{#each sources}}
-          {{#unless rm}}
-            {{>fileSource}}
-          {{/unless}}
-        {{/each}}
-  {{else}}
+        {{>recordSources}}
+       {{else}}
         <span class="no-more">
           а все, нет больше никого.. Посетите <a href="http://anon.fm">anon.fm</a> чтобы обмазаться свежим ефиром.
         </span>

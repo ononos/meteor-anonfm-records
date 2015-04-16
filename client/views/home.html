@@ -48,11 +48,7 @@
         {{schedule}}
       {{else}}
         {{fname}}
-        {{#each sources}}
-          {{#unless rm}}
-            {{>fileSource}}
-          {{/unless}}
-        {{/each}}
+        {{>recordSources}}
       {{/if}}
     </td>
   </tr>
@@ -67,13 +63,4 @@
         ... И спустя {{prevRecDistance}} ...
       </td>
     </tr>
-</template>
-
-<template name="fileSource">
-  {{#if playing}}
-    <i data-play="pause" class="play-btn fa fa-fw fa-pause"></i>
-  {{else}}
-    <i data-action="play" class="play-btn fa fa-fw fa-play"></i>
-  {{/if}}
-    <a href="{{fileUrl}}">[{{title}}]</a>
 </template>

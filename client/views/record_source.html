@@ -1,0 +1,16 @@
+<template name="recordSources">
+  {{#each sources}}
+    {{#unless rm}}
+      {{>recordSourceItem}}
+    {{/unless}}
+  {{/each}}
+</template>
+
+<template name="recordSourceItem">
+  {{#if playing}}
+    <i data-play="pause" class="play-btn fa fa-fw fa-pause"></i>
+  {{else}}
+    <i data-action="play" class="play-btn fa fa-fw fa-play"></i>
+  {{/if}}
+    <a href="{{fileUrl}}">[{{title}}]</a>
+</template>
