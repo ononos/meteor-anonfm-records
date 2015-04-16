@@ -13,7 +13,7 @@ var uppod,
     currentUrlPlaing = new ReactiveVar(""),
     isPlaying = new ReactiveVar(false),     // true on events
 
-PlayUrl = function(recordId, url) {
+PlayUrl = function(recordId, sourceId, url) {
   currentUrlPlaing.set(url);
   Session.set('current-playing-id', recordId);
 
@@ -35,22 +35,40 @@ PlayUrl = function(recordId, url) {
   el.addEventListener("stop", function() {
     isPlaying.set(false);
   });
+  el.addEventListener("end", function(e) {
+    var nextId = Session.get('next-record-id');
+    if (nextId) {
+      var nextRecord = Records.findOne(nextId);
+      // find in next record same source and play if exists, otherwise play firt source
+      if (nextRecord.sources) {
+        var source = _.find(nextRecord.sources, function(it) {
+          return it.id._str === sourceId._str;
+        });
+        source = source || nextRecord.sources[0];
+        var url = urlOfSource(source, nextRecord.fname);
+        PlayUrl(nextRecord._id, source.id, url);
+      }
+    }                      
+  });
   uppod.Play();
   isPlaying.set(true);
 };
 
-function urlOfSource () {
-  var url = this.url;         // maybe record's source have "url"?
+function urlOfSource (recordSource, filename) {
+  var url = recordSource.url;         // maybe record's source have "url"?
   // if not, get it from source's "url" + filename
   // Source url must end "/"
   if (!url) {
-    url = Sources.findOne(this.id).url + Template.parentData(1).fname;
+    url = Sources.findOne(recordSource.id).url + filename;
   }
   return url;
 }
 
 Template.recordSourceItem.helpers({
-  fileUrl: urlOfSource,
+  fileUrl: function() {
+    var filename = Template.parentData(1).fname;
+    return urlOfSource(this, filename);
+  },
 
   // Source title
   title: function() {
@@ -59,13 +77,29 @@ Template.recordSourceItem.helpers({
   },
 
   playing: function() {
-    return urlOfSource.call(this) === currentUrlPlaing.get() && isPlaying.get();
+    var filename = Template.parentData(1).fname;
+    return urlOfSource(this, filename) === currentUrlPlaing.get() && isPlaying.get();
   }
 });
 
 Template.recordSourceItem.events({
   'click [data-action="play"]': function(e, t) {
-    var record = Template.parentData(1);
-    PlayUrl(record._id, urlOfSource.call(this));
+    // .this - source of record
+    var record = Template.parentData(1),
+        curUrl = currentUrlPlaing.get();
+
+    var filename = Template.parentData(1).fname,
+        url = urlOfSource(this, filename);
+    
+    if (uppod && curUrl === url) {
+      uppod.Play();
+    } else {
+      PlayUrl(record._id, this.id, url);
+    }
+  },
+
+  'click [data-action="pause"]': function(e, t) {
+      if (uppod)
+        uppod.Pause();    
   }
 });
