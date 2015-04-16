@@ -40,6 +40,12 @@ schema.main = new SimpleSchema({
     type: Boolean
   },
   // record:
+  schOk: {                      // is this record under schedule?
+    type: Boolean,
+  },
+  schOkAdm: {                   // forced by admin to be schedule
+    type: Boolean,
+  },
   fname: {                      // file name if record
     type: String,
   },
@@ -64,7 +70,7 @@ Records.attachSchema(schema.main);
 Records.deny({
   update: function(userId, post, fieldNames) {
     // deny the update if it contains something other than the following fields
-    return (_.without(fieldNames, 'rm').length > 0);
+    return (_.without(fieldNames, 'rm', 'schOkAdm').length > 0);
   }
 });
 

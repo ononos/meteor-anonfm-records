@@ -17,14 +17,7 @@ Template.fileRow.helpers({
   },
 
   isScheduled: function() {
-    if (this.isSch)
-      return false;
-    var prevSchedule = Records.findOne({t: {$lt: this.t}, isSch: true}, {reactive: false, sort: {t: -1}});
-    return (prevSchedule &&
-            // we found scheduled that was before this record (and btw, t is -15 minutes),
-            // now check is record started before this schedule ended (and +15 minutes, so +30)
-            prevSchedule.t.getTime() + (30 * 60 + prevSchedule.duration) * 1000 >
-            this.t.getTime());
+    return (this.schOk || this.schOkAdm);
   },
 
   // return true if prev record is >= 4 days
