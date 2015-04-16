@@ -55,6 +55,9 @@ tr {
         border: 2px solid #000;
         background-color: #eae;
     }
+    &.will-be-next {
+        border: 2px solid #000;
+    }
     &.prev-record-is-far {
         td {
             padding-top: 10px;
@@ -75,8 +78,14 @@ tr {
     }
 }
 
-.player-info {
-    
+.player-info-box {
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ccc;
+    .no-more {
+        font-style: italic;
+        font-family: Times;
+    }
 }
 
 td.dj a {

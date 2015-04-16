@@ -31,6 +31,7 @@
 <template name="fileRow">
   <tr class="{{addClassIf2 isSch "schedule" "record"}}
              {{addClassIf isScheduled "scheduled"}}
+             {{addClassIf nextIt "will-be-next"}}
              {{addClassIf playingIt "playing"}}">
 
     <td class="date" nowrap>

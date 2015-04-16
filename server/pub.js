@@ -1,5 +1,24 @@
 // publication
 
+Meteor.publish("current-file", function(recordId) {
+  return Records.find({_id: recordId});
+});
+
+Meteor.publish("next-file", function(recordId, onlyThisDj) {
+  var cur = Records.findOne({_id: recordId});
+  if (cur) {
+    var query = {
+      t: {$gt: cur.t},
+      isSch: {$ne: true}
+    };
+    if (onlyThisDj)
+      query.dj = cur.dj;
+    return Records.find(query, {sort: {t: 1}, limit: 1});
+  }
+  else
+    return [];
+});
+
 function checkLimit(limit) {
   if (limit < 0) limit = -limit;
   if (limit > CFG.MaxRecs || !limit)

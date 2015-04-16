@@ -36,8 +36,13 @@ Template.fileRow.helpers({
   },
 
   playingIt: function() {
-    var curPlayId = Session.get('current-playing');
+    var curPlayId = Session.get('current-playing-id');
     return curPlayId && this._id._str === curPlayId._str;
+  },
+
+  nextIt: function() {
+    var nextPlayId = Session.get('next-record-id');
+    return nextPlayId && this._id._str === nextPlayId._str;
   },
 
   filter_eq_date: function() {
@@ -99,7 +104,7 @@ var uppod,
 
 PlayUrl = function(recordId, url) {
   currentUrlPlaing.set(url);
-  Session.set('current-playing', recordId);
+  Session.set('current-playing-id', recordId);
 
   if (!uppod)
     uppod = null;

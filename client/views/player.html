@@ -4,25 +4,49 @@
       <div class="player" id="player"></div>
     </div>
   </div>
-  <div class="row">
-    {{>playerInfoBar currentId}}
+  <div class="row player-info-box">
+    {{>playerInfoBar currentRecord=currentRecord}}
   </div>
 </template>
 
 <template name="playerInfoBar">
-  {{#if isReady}}
-    <div class="col-md-12 player-info">
-      <span class="filename">{{record.fname}}</span>
-      {{#with record}}
+  {{#if currentRecord}}
+    <div class="col-md-12">
+      Сейчас:
+      {{#with currentRecord}}
+        {{>btnThisDj dj=dj}}
+        <span class="filename">{{fname}}</span>
         {{#each sources}}
           {{#unless rm}}
             {{>fileSource}}
           {{/unless}}
         {{/each}}
       {{/with}}
-      <button class="btn btn-sm btn-default">
-        Перейти
-      </button>
+    </div>
+    <div class="col-md-12">
+      Потом будет:
+      {{#with nextRecord}}
+        {{dj}}
+        <span class="filename">{{fname}}</span>
+        {{#each sources}}
+          {{#unless rm}}
+            {{>fileSource}}
+          {{/unless}}
+        {{/each}}
+  {{else}}
+        <span class="no-more">
+          а все, нет больше никого.. Посетите <a href="http://anon.fm">anon.fm</a> чтобы обмазаться свежим ефиром.
+        </span>
+      {{/with}}
     </div>
   {{/if}}
+</template>
+
+<template name="btnThisDj">
+  <button data-action="toggle-dj"
+          data-toggle="tooltip" data-title="Играть следующий только этого dj"
+          data-placement="right"
+          class="btn btn-sm btn-default {{addClassIf nextDjOnly "active"}}" autocomplete="off">
+    {{dj}}
+  </button>
 </template>
