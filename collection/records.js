@@ -80,7 +80,6 @@ Records.allow({
 
 if (Meteor.isServer) {
   Records._ensureIndex({dj: 1, t: 1});
+  Records._ensureIndex({t: 1});
   Records._ensureIndex({dj: 1});
-  Records._ensureIndex({isSch: 1});
-  //Records._ensureIndex({timestamp: 1, name: 1});
 }
