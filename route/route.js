@@ -1,5 +1,6 @@
 Router.configure({
   layoutTemplate: 'appLayout',
+  loadingTemplate: 'loading',
   waitOn: function() {
     return Meteor.subscribe('sources');
   }
