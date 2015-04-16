@@ -1,10 +1,16 @@
 // publication
 
 Meteor.publish("current-file", function(recordId) {
-  return Records.find({_id: recordId});
+  if (recordId instanceof Meteor.Collection.ObjectID)
+    return Records.find({_id: recordId});
+  else
+    return [];
 });
 
 Meteor.publish("next-file", function(recordId, onlyThisDj) {
+  if (!(recordId instanceof Meteor.Collection.ObjectID))
+    return [];
+
   var cur = Records.findOne({_id: recordId});
   if (cur) {
     var query = {
