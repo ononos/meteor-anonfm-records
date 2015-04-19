@@ -16,6 +16,29 @@ Template.fileRow.helpers({
       return '';
   },
 
+  dateFromNow: function() { return moment(this.t).fromNow(); },
+
+  fileSzHumanized: function() {
+    var size = this.size,
+        textAddon = "K";
+    if (_.isUndefined (size) || _.isNull (size))
+      return '?';
+    if (size < 1048576)
+      size = size / 1024;
+    else {
+      size = size / 1048576;
+      textAddon = "M";
+    }
+    return '' + (Math.round(size * 10) / 10) + textAddon;
+  },
+  smallFile: function() { return this.size && this.size < 1048576; },    // < 1M
+  largeFile: function() { return this.size && this.size > 103809024; }, // >99M
+  fileSize:  function() { return (this.size || 0).toLocaleString(); },
+
+  fileExt: function() {
+    return this.fname.split('.').pop(); // nice: http://stackoverflow.com/questions/190852/how-can-i-get-file-extensions-with-javascript
+  },
+
   isScheduled: function() {
     return (this.schOk || this.schOkAdm);
   },
@@ -53,15 +76,12 @@ Template.fileRow.helpers({
     var h = parseInt(duration / 3600),
         m = parseInt((duration - h * 3600) / 60);
     return  ((h<10) ? '0' + h : h) + ':' + ((m<10) ? '0' + m : m);
-  }
+  },
+
 });
 
 Template.fileRow.rendered = function () {
-  this.$('[data-action="setDate"]')
-    .tooltip({
-      placement: "right",
-      title: moment(this.data.t).fromNow()
-    });
+  this.$('[data-toggle="tooltip"]').tooltip();
 };
 
 Template.fileRow.events({

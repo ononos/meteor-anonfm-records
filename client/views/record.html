@@ -5,7 +5,12 @@
   <table class="records">
     <thead>
       <tr>
-        <th>Дата</th><th class="col-md-3">Диджей</th><th>Прод</th><th class="col-md-7">Запись</th>
+        <th>Дата</th>
+        <th class="col-md-3">Диджей</th>
+        <th>Прод</th>
+        <th>Разм</th>
+        <th>Тип</th>
+        <th class="col-md-7">Запись</th>
       </tr>
     </thead>
     <tbody>
@@ -35,7 +40,12 @@
              {{addClassIf playingIt "playing"}}">
 
     <td class="date" nowrap>
-      <span data-action="setDate" class="{{addClassIf filter_eq_date "current-date"}}">{{created}}</span>
+      <span data-action="setDate"
+            class="{{addClassIf filter_eq_date "current-date"}}"
+            data-toggle="tooltip" data-placement="right"
+            data-title="{{dateFromNow}}">
+        {{created}}
+      </span>
     </td>
     <td class="dj">
       <a href="{{pathFor route="records"}}">
@@ -43,14 +53,23 @@
       </a>
     </td>
     <td class="duration">{{durationHHMM}}</td>
-    <td>
-      {{#if isSch}}
+    {{#if isSch}}
+      <td colspan="3">
         {{schedule}}
-      {{else}}
-        {{fname}}
+      </td>
+    {{else}}
+      <td class="file-size
+                 {{addClassIf smallFile "file-small"}}
+                 {{addClassIf largeFile "file-large"}}">
+        <span data-toggle="tooltip" data-placement="right" data-title="{{fileSize}}">
+          {{fileSzHumanized}}
+        </span>
+      </td>
+      <td>{{fileExt}}</td>
+      <td>
         {{>recordSources}}
-      {{/if}}
-    </td>
+      </td>
+    {{/if}}
   </tr>
   {{#if isLargeDistance}}
     {{>largeDistance t=t}}
@@ -59,7 +78,7 @@
 
 <template name="largeDistance">
     <tr class="prev-record-is-far">
-      <td colspan="4">
+      <td colspan="5">
         ... И спустя {{prevRecDistance}} ...
       </td>
     </tr>
