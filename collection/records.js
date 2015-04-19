@@ -37,7 +37,8 @@ schema.main = new SimpleSchema({
     type: Number,
   },
   rm: {                         // just hide (remove from view)
-    type: Boolean
+    type: Boolean,
+    optional: true,
   },
   // record:
   schOk: {                      // is this record under schedule?
@@ -45,6 +46,7 @@ schema.main = new SimpleSchema({
   },
   schOkAdm: {                   // forced by admin to be schedule
     type: Boolean,
+    optional: true,
   },
   fname: {                      // file name if record
     type: String,

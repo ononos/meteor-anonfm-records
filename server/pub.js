@@ -44,7 +44,7 @@ Meteor.publish("files-before-ts", function(timefrom, dj, limit) {
   if (timefrom)
     query.t = {$lte: timefrom};
 
-  if (!isAdmin(this.userId))
+  if (!isAdminById(this.userId))
     query.rm = {$ne: true};
 
   console.log(query, {sort: {t: -1 }, limit: limit});
@@ -62,7 +62,7 @@ Meteor.publish("files-after-ts", function(timefrom, dj, limit) {
   if (timefrom)
     query.t = {$gt: timefrom};
 
-  if (!isAdmin(this.userId))
+  if (!isAdminById(this.userId))
     query.rm = {$ne: true};
 
   console.log(query, {sort: {t: 1 }, limit: limit});
@@ -73,7 +73,7 @@ Meteor.publish("sources", function() {
   var query = {},
       options = {};
 
-  if (!isAdmin(this.userId)) {
+  if (!isAdminById(this.userId)) {
     query.rm = {$ne: true};
     options.fields = {url: 1, title: 1};
   }

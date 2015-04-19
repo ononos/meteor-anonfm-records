@@ -104,3 +104,24 @@ Template.largeDistance.helpers({
     return moment.duration(moment(this.t).diff(prev.t)).humanize();
   },
 });
+
+
+// actions
+// this.id - id of file record
+Template.fileRowActions.events({
+  'click [data-action="remove"]': function(e, t) {
+    Records.update(this.ctx._id, {$set: {rm: true}});
+  },
+
+  'click [data-action="restore"]': function(e, t) {
+    Records.update(this.ctx._id, {$unset: {rm: ""}});
+  },
+
+  'click [data-action="schOk"]': function(e, t) {
+    Records.update(this.ctx._id, {$set: {schOkAdm: true}});
+  },
+
+  'click [data-action="schNotOk"]': function(e, t) {
+    Records.update(this.ctx._id, {$unset: {schOkAdm: ""}});
+  },
+});
