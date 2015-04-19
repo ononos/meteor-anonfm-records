@@ -1,16 +1,20 @@
 <template name="recordSources">
-  {{#each sources}}
-    {{#unless rm}}
-      {{>recordSourceItem}}
-    {{/unless}}
-  {{/each}}
+  <span class="sources">
+    {{#each sources}}
+      {{#unless rm}}
+        {{>recordSourceItem}}
+      {{/unless}}
+    {{/each}}
+  </span>
 </template>
 
 <template name="recordSourceItem">
-  {{#if playing}}
-    <i data-action="pause" class="play-btn fa fa-fw fa-pause"></i>
-  {{else}}
-    <i data-action="play" class="play-btn fa fa-fw fa-play"></i>
-  {{/if}}
-    <a href="{{fileUrl}}">[{{title}}]</a>
+  <span class="source">
+    {{#if playing}}
+      <i data-action="pause" class="play-btn fa fa-fw fa-pause"></i>
+    {{else}}
+      <i data-action="play" class="play-btn fa fa-fw fa-play"></i>
+    {{/if}}
+    <a class="source-url" title="Скачать запись" target="_blank" href="{{fileUrl}}">[{{title}}]</a>
+  </span>
 </template>
