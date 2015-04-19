@@ -9,7 +9,7 @@
 
 /**********************************
 
-Styles
+Styles of records
 
 ***********************************/
 
@@ -69,24 +69,10 @@ tr {
     }
 }
 
-.play-btn {
-    padding-left: 5px;
-    padding-right: 5px;
-    cursor: pointer;
-    &:hover {
-        border: 1px outset #ccc;
-    }
+.file-ext {
+    font-family: monospace;
 }
 
-.player-info-box {
-    margin-bottom: 15px;
-    padding-bottom: 5px;
-    border-bottom: 1px solid #ccc;
-    .no-more {
-        font-style: italic;
-        font-family: Times;
-    }
-}
 
 td.dj a {
         color: red;
@@ -99,8 +85,39 @@ td.duration {
     border: 1px solid #ccc;
 }
 
-.player {
-    max-height: 35px;
-    margin-bottom: 15px;
-    margin-top: 15px;
+
+.file-size {
+    text-align: right;
+    font-family: monospace;
+
+    &.file-small {
+        color: #777;
+    }
+    &.file-large {
+        font-weight: bold;
+    }
+}
+
+.source {
+    + .source {
+        border-left: 1px solid #ccc;
+        margin-left:.5em;
+        padding-left:.5em;
+    }
+}
+
+.source-url, .source-url:link {
+    color: green;
+    font-weight: bold;
+    font-family: fantasy;
+}
+
+.play-btn {
+    padding-left: 5px;
+    padding-right: 15px;
+    cursor: pointer;
+    border: 1px solid #fff;
+    &:hover {
+        border: 1px outset #ccc;
+    }
 }
