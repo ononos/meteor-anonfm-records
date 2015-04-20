@@ -8,42 +8,56 @@
 
   <hr />
 
-  {{#each comments}}
-    {{> comment}}
-  {{/each}}
+  <div class="col-md-12">
+    {{#each comments}}
+      {{> comment}}
+    {{/each}}
+  </div>
 </template>
 
 <template name="comment">
-  <div class="comment {{addClassIf rm "removed"}}">
-    <span class="nickname">{{username}}</span>
-    <span class="comment-date">{{formatDate t "YYYY MMM DD (ddd) HH:mm"}} ({{timeAgo t}})</span>
-    {{#if isAdmin}}
-      <button data-action="toggle-remove" class="btn btn-sm btn-danger">
-        {{#if rm}}Restore{{else}}Remove{{/if}}
-      </button>
-    {{/if}}
-    <div class="comment-body">{{{textHTML}}}</div>
+  <div class="wrapper">
+    <div class="comment {{addClassIf rm "removed"}}">
+      <span class="nickname">{{Or username "Аноним"}}</span>
+      <span class="comment-date">{{formatDate t "YYYY MMM DD (ddd) HH:mm"}} ({{timeAgo t}})</span>
+      {{#if isAdmin}}
+        <a data-action="toggle-remove">
+          {{#if rm}}Restore{{else}}Remove{{/if}}
+        </a>
+      {{/if}}
+      <div class="comment-body">
+        <div class="marked">{{{textHTML}}}</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <template name="newComment">
-  <div>
-    <form class="form-horizontal">
-      <fieldset {{addClassIf posting 'disabled'}}>
-        <div class="form-group">
-          <input name="username" class="form-control" type="text" placeholder="Nick name" />
-        </div>
-        <div class="form-group">
-          <textarea cols="10" class="form-control"></textarea>
-        </div>
-        <div class="form-group">
-          <div class="btn-group">
-            <button data-action="newpost" type="submit" class="btn btn-default">
-              Add post
-            </button>
+  <div class="row">
+    <div class="col-md-6">
+      <form class="form-horizontal">
+        <fieldset {{addClassIf posting 'disabled'}}>
+          <div class="form-group">
+            <input name="username" class="form-control" type="text" placeholder="Nick name" />
           </div>
-        </div>
-      </fieldset>
-    </form>
+          <div class="form-group">
+            <textarea rows="10" class="form-control"></textarea>
+          </div>
+          <div class="form-group">
+            <div class="btn-group">
+              <button data-action="newpost" type="submit" class="btn btn-default">
+                Add post
+              </button>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+    <div class="col-md-6">
+      <div id="preview" class="marked">
+        <p>А здеся будет предпросмотр вашего сообщения</p>
+        <p>Markdown используется для разметки</p>
+      </div>
+    </div>
   </div>
 </template>

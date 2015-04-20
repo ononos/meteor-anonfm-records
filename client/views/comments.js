@@ -4,8 +4,21 @@ Template.comment.events({
   }
 });
 
+/*
+ * New comment form
+ */
+
 Template.newComment.created = function() {
-  this.vPosting = new ReactiveVar(false);
+  this.vPosting = new ReactiveVar(false); // upload post
+};
+
+Template.newComment.rendered = function() {
+  // build preview of markup on type
+  var previewArea = this.$('#preview');
+  this.$('textarea').on('keyup paste', _.debounce(function(e) {
+    var text = e.currentTarget.value;
+    preview.innerHTML = marked(text);
+  }, 1000));
 };
 
 Template.newComment.helpers({
@@ -17,20 +30,17 @@ Template.newComment.events({
     e.preventDefault();
 
     var nick = t.find('[name="username"]').value,
-        text = t.find('textarea').value,
-        form = t.find('form');
+        text = t.find('textarea').value;
 
-    console.log(nick, text);
     t.vPosting.set(true);
-    console.log(this);
     Meteor.call('add-comment', this.ctx.record.fname, nick, text, LOCAL_ID, function(err) {
       t.vPosting.set(false);
       if(err) {
 
       } else {
-        form.reset();
+        t.find('form').reset();
+        t.find('#preview').innerHTML = '';
       }
     });
-
-  }
+  },
 });
