@@ -57,12 +57,12 @@ Template.datePick.rendered = function() {
     todayHighlight: true,
     pickerPosition: 'bottom-left'
   })
-    .datetimepicker("setDate", Session.get("filter-date") || new Date())
+    .datetimepicker("setDate", new Date(Session.get("filter-date")))
     .on('changeDate', function(e) {
       var self = $(this);
       Meteor.defer(function() {
         if (!self.datetimepicker('visible')) {
-          Session.set("filter-date", e.date);
+          Session.set("filter-date", +e.date);
           Session.set("filter-ts-direction", false);
         }
 

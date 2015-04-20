@@ -1,6 +1,6 @@
 Template.records.events({
   'click [data-action="setDateNow"]': function() {
-    Session.set("filter-date", new Date());
+    Session.set("filter-date", +new Date());
     Session.set("filter-ts-direction", false);
   }
 });
@@ -47,8 +47,8 @@ Template.fileRow.helpers({
   isLargeDistance: function() {
     var prev = Records.findOne({t: {$lt: this.t}}, {sort: {t: -1}});
     return (prev &&
-            prev.t.getTime() + 4 * 86400000 <
-            this.t.getTime());
+            +prev.t + 4 * 86400000 <
+            +this.t);
   },
 
   playingIt: function() {
@@ -65,7 +65,7 @@ Template.fileRow.helpers({
     var date = Session.get('filter-date');
     if (_.isUndefined(date))
       return false;
-    return this.t.getTime() === date.getTime();
+    return +this.t === date;
   },
 
   durationHHMM: function() {
@@ -90,7 +90,7 @@ Template.fileRow.events({
         countAfter = Records.find({t: {$gt: this.t}}).count(),
         total = countBefore + countAfter;
 
-    Session.set("filter-date", this.t);
+    Session.set("filter-date", +this.t); // t - Date, convert to int
     Session.set("filter-ts-direction",  countAfter < countBefore -1);
   }
 });

@@ -42,7 +42,7 @@ Meteor.publish("files-before-ts", function(timefrom, dj, limit) {
     query.dj = dj;
 
   if (timefrom)
-    query.t = {$lte: timefrom};
+    query.t = {$lte: new Date(timefrom)};
 
   if (!isAdminById(this.userId))
     query.rm = {$ne: true};
@@ -60,7 +60,7 @@ Meteor.publish("files-after-ts", function(timefrom, dj, limit) {
     query.dj = dj;
 
   if (timefrom)
-    query.t = {$gt: timefrom};
+    query.t = {$gt: new Date(timefrom)};
 
   if (!isAdminById(this.userId))
     query.rm = {$ne: true};
