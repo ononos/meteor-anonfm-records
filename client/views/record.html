@@ -56,6 +56,7 @@
     <td class="duration">{{durationHHMM}}</td>
     {{#if isSch}}
       <td colspan="3">
+        {{>fileRowActions ctx=this}}
         {{schedule}}
       </td>
     {{else}}
