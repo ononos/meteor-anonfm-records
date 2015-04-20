@@ -63,6 +63,17 @@ schema.main = new SimpleSchema({
   hasPreview: {
     type: Boolean
   },
+
+  comments: {                   // number of comments
+    type: Number,
+    optional: true
+  },
+
+  likes: {                      // number of likes
+    type: Number,
+    optional: true
+  },
+
 });
 
 Records = new Meteor.Collection('files');
