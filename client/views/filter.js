@@ -48,6 +48,12 @@ Template.DjListSelect.rendered = function() {
   }
 };
 
+Template.DjListSelect.events({
+  'click [data-action="reset-dj"]': function(e, t) {
+    Router.go('records', {dj: '!all'});
+  }
+});
+
 Template.datePick.rendered = function() {
   var datepicker = this.$('.date').datetimepicker({
     language: 'ru',

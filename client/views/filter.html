@@ -1,5 +1,12 @@
 <template name="filter">
   <div class="row">
+    <div class="col-md-1 col-sm-1">
+      <div class="form-group">
+        <button data-action="reset" class="btn btn-default">
+          Сброс
+        </button>
+      </div>
+    </div>
     <div class="col-md-3 col-sm-4">
       <div class="form-group">
         {{>datePick}}
@@ -10,18 +17,18 @@
         {{> DjListSelect}}
       </div>
     </div>
-    <div class="col-md-1 col-sm-1">
-      <div class="form-group">
-        <button data-action="reset" class="btn btn-default">
-          Сброс
-        </button>
-      </div>
-    </div>
   </div>
 </template>
 
 <template name="DjListSelect">
-  <select class="form-control"></select>
+  <div class="input-group">
+    <div class="input-group-btn">
+      <button data-action="reset-dj" class="btn btn-default">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <select class="form-control"></select>
+  </div>
 </template>
 
 <template name="datePick">
