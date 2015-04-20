@@ -1,7 +1,14 @@
 Template.comment.events({
   'click [data-action="toggle-remove"]': function(e, t) {
     Meteor.call('toggle-remove-comment', this._id, Messages.error);
-  }
+  },
+
+  // remove forever
+  'click [data-action="unlink"]': function(e, t) {
+    if (confirm("Remove comment?"))
+      Meteor.call('unlink-comment', this._id, Messages.error);
+  },
+
 });
 
 /*

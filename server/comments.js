@@ -73,6 +73,21 @@ Meteor.methods({
         Records.update({fname: c.record},
                        {$inc: {comments: (c.rm) ? 1 : -1}});
     }
+  },
+
+  // remove from db
+  'unlink-comment': function(commentId) {
+    check(commentId, String);
+
+    if(!isAdmin())
+      throw new Meteor.Error(401, 'Admin only');
+
+    var c = Comments.findOne(commentId);
+    if (c) {
+      if (Comments.remove(commentId))
+          Records.update({fname: c.record},
+                         {$inc: {comments: -1}});
+    }
   }
 });
 
