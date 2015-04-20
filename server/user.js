@@ -17,10 +17,35 @@ Accounts.onCreateUser(function(options, user) {
   return user;
 });
 
+// publish current user's data
 Meteor.publish('currentUser', function() {
   var user = Meteor.users.find({_id: this.userId},
                                {fields: {
                                  createdAt: false,
                                  services: false}});
   return user;
+});
+
+// user related methods
+Meteor.methods({
+  // create token
+  'gen-token': function() {
+    console.log(this.connection);
+    if (!Throttle.checkThenSet('gen-token/' + this.connection, 2, 60000)) {
+      throw new Meteor.Error(500, 'Under Heavy load');
+    }
+
+    if (!Throttle.checkThenSet('global-token', 10, 6000)) {
+      throw new Meteor.Error(500, 'Under Heavy load');
+    }
+
+    var now = new Date();
+    return UserTokens.insert({created: now, lastUse: now});
+  },
+
+  // keep alive this token, update lastUse date
+  'refresh-token': function(tok) {
+    check(tok, String);
+    return UserTokens.update(tok, {$set: {lastUse: new Date()}});
+  }
 });

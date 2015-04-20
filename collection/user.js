@@ -33,3 +33,22 @@ var schema = new SimpleSchema({
 });
 
 Meteor.users.attachSchema(schema);
+
+
+/*
+
+ Tokens for not registered users.
+ see server/user.js
+
+*/
+var tokens = new SimpleSchema({
+  created: {
+    type: Date
+  },
+  lastUse: {
+    type: Date
+  }
+});
+
+UserTokens = new Meteor.Collection('tokens');
+UserTokens.attachSchema(tokens);
