@@ -24,4 +24,7 @@ zeroasterisk:throttle
 zeroasterisk:throttle-accounts
 gadicohen:headers
 
+chrismbeckett:toastr
+
+# local packages
 uppod

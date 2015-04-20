@@ -40,7 +40,8 @@ Template.DjListSelect.rendered = function() {
       if(!err) {
         DjList.set(djs);
         createSelector(DjList.get());
-      }
+      } else
+        Messages.error(err);
     });
   } else {
     createSelector(DjList.get());

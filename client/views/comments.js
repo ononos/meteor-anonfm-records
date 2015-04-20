@@ -1,6 +1,6 @@
 Template.comment.events({
   'click [data-action="toggle-remove"]': function(e, t) {
-    Meteor.call('toggle-remove-comment', this._id);
+    Meteor.call('toggle-remove-comment', this._id, Messages.error);
   }
 });
 
@@ -36,7 +36,7 @@ Template.newComment.events({
     Meteor.call('add-comment', this.ctx.record.fname, nick, text, LOCAL_ID, function(err) {
       t.vPosting.set(false);
       if(err) {
-
+        Messages.error(err);
       } else {
         t.find('form').reset();
         t.find('#preview').innerHTML = '';
