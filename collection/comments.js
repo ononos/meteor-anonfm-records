@@ -9,8 +9,13 @@ var schema = new SimpleSchema({
   t: {
     type: Date
   },
-  userId: {                     // owner, user Id, or 't' + tokenID
-    type: String
+  userId: {                     // owner of msg
+    type: String,
+    optional: true
+  },
+  userTok: {                    // user token for anonim
+    type: String,
+    optional: true
   },
   username: {
     type: String,

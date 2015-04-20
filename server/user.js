@@ -17,6 +17,19 @@ Accounts.onCreateUser(function(options, user) {
   return user;
 });
 
+// return token UserTokens record or null if not found and not ready
+checkUserToken = function(userToken) {
+  if (_.isUndefined(userToken))
+    return false;
+  // try find user with that token. make sure token old (15min)
+  var u = UserTokens.findOne(userToken);
+  
+  if (!(u && u.created < new Date() - 15 * 60000))
+    return false;
+
+  return u;
+};
+
 // publish current user's data
 Meteor.publish('currentUser', function() {
   var user = Meteor.users.find({_id: this.userId},
@@ -47,5 +60,5 @@ Meteor.methods({
   'refresh-token': function(tok) {
     check(tok, String);
     return UserTokens.update(tok, {$set: {lastUse: new Date()}});
-  }
+  },
 });

@@ -8,7 +8,7 @@ Meteor.publish('comments', function(recordName) {
       commentsQuery = {record: recordName};
 
   if (!isAdminById(this.userId)) {
-    commentsOpts.fields = {userId: 0};
+    commentsOpts.fields = {userId: 0, userTop: 0};
     commentsQuery.rm = {$ne: true};
   }
 
@@ -32,11 +32,10 @@ Meteor.methods({
 
     var userId = this.userId,
         userTok;
-    if (_.isUndefined(userId)) {
-      var t = checkUserToken(userId);
-      if (!uTok)
+    if (!userId) {
+      var t = checkUserToken(userToken);
+      if (!t)
         throw new Meteor.Error(500);
-
       userTok = t._id;
     }
     var userIdorTok = userId || 't' + userTok;
@@ -55,7 +54,8 @@ Meteor.methods({
                                   t: new Date(),
                                   username: nick,
                                   textHTML: marked(text),
-                                  userId: userIdorTok
+                                  userId: userId,
+                                  userTok: userTok
                                 });
     if (comId)
       Records.update({fname: recordName}, {$inc: {comments: 1}});
@@ -68,7 +68,6 @@ Meteor.methods({
       throw new Meteor.Error(401, 'Admin only');
 
     var c = Comments.findOne(commentId);
-    console.log('toggle', c, commentId, !c.rm);
     if (c) {
       if (Comments.update(commentId, {$set: {rm: !c.rm}}))
         Records.update({fname: c.record},
