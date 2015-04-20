@@ -1,3 +1,5 @@
+@import "./lib/custom.bootstrap.import.less";
+
 /*
   mixings
   */
@@ -40,9 +42,48 @@ td.date {
     color: green;
 }
 
+/*
+  current selected date
+*/
 .current-date {
     color: #000;
+    font-weight: bold;
+
+    .animation(current-date linear 2.5s);
 }
+
+@-webkit-keyframes current-date {.current-date-keys;}
+@-o-keyframes current-date {.current-date-keys;}
+@keyframes current-date {.current-date-keys;}
+
+.current-date-keys() {
+    0% {
+        color: red;
+    }
+    25% {
+        color: black;
+    }
+    26% {
+        color: red;
+    }
+    50% {
+        color: black;
+    }
+    51% {
+        color: red;
+    }
+    75% {
+        color: black;
+    }
+    76% {
+        color: red;
+    }
+    100% {
+        color: black;
+    }
+
+}
+// end current selected date
 
 tr {
     &.schedule {
