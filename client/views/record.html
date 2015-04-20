@@ -44,8 +44,8 @@
       <span data-action="setDate"
             class="{{addClassIf filter_eq_date "current-date"}}"
             data-toggle="tooltip" data-placement="right"
-            data-title="{{dateFromNow}}">
-        {{created}}
+            data-title="{{timeAgo t}}">
+        {{formatDate created "YYYY-MM-DD HH:mm"}}
       </span>
     </td>
     <td class="dj">
@@ -135,10 +135,12 @@
 <template name="social">
   <span class="likes">
     <i class="fa fa-star"></i>
-    {{Or likes 0}}
+    {{Or ctx.likes 0}}
   </span>
   <span class="comments">
-    <i class="fa fa-comments-o"></i>
-    {{Or comments 0}}
+    <a href="{{pathFor route="comments" dj=ctx.dj record=ctx.fname}}">
+      <i class="fa fa-comments-o"></i>
+      {{Or ctx.comments 0}}
+    </a>
   </span>
 </template>

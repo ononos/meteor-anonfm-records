@@ -7,6 +7,7 @@ Router.configure({
   }
 });
 
+
 Meteor.startup(function () {
 
   Router.route('/', function (){
@@ -31,4 +32,22 @@ Meteor.startup(function () {
     }
   });
 
+  Router.route('/comments/:record', {
+    name: "comments",
+
+    waitOn: function() {
+      return Meteor.subscribe('comments', this.params.record);
+    },
+
+    data: function() {
+      var record = Records.findOne({fname: this.params.record});
+      if (record)
+        Session.set('filter-date', +record.t); // ensure we return to proper date
+      Session.get('filter-ts-direction', false);
+      return {
+        record: record,
+        comments: Comments.find({}, {sort: {t: -1}})
+      };
+    }
+  });
 });

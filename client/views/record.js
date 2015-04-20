@@ -8,12 +8,7 @@ Template.records.events({
 /* record row */
 Template.fileRow.helpers({
   created: function() {
-    if (!_.isUndefined(this.schTime))
-      return moment(this.schTime).format("YYYY-MM-DD HH:mm");
-    else if (!_.isUndefined(this.t))
-      return moment(this.t).format("YYYY-MM-DD HH:mm");
-    else
-      return '';
+    return this.schTime || this.t;
   },
 
   dateFromNow: function() { return moment(this.t).fromNow(); },
