@@ -13,7 +13,7 @@ var schema = new SimpleSchema({
     type: String,
     optional: true
   },
-  userTok: {                    // user token for anonim
+  userTok: {                    // user token for anonymous
     type: String,
     optional: true
   },
