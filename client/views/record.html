@@ -92,44 +92,46 @@
 </template>
 
 <template name="fileRowActions">
-  <div class="btn-group">
-    <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-      cfg
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu">
-      <li>
-        {{#if ctx.rm}}
-          <a href="#" data-action="restore">
-            <i class="fa fa-share"></i>
-            Востановить
-          </a>
-        {{else}}
-          <a href="#" data-action="remove">
-            <i class="fa fa-trash"></i>
-            Удалить
-          </a>
-        {{/if}}
-      </li>
-      {{#unless ctx.isSch}}
+  {{#if isAdmin}}
+    <div class="btn-group">
+      <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+        cfg
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
         <li>
-          {{#if ctx.schOkAdm}}
-            <a href="#" data-action="schNotOk">
-              <i class="fa fa-fw"></i>
-              Убрать из под расписаня
+          {{#if ctx.rm}}
+            <a href="#" data-action="restore">
+              <i class="fa fa-share"></i>
+              Востановить
             </a>
           {{else}}
-            {{#unless ctx.schOk}}
-              <a href="#" data-action="schOk">
-                <i class="fa fa-fw"></i>
-                Запись под расписанием (принудительно)
-              </a>
-            {{/unless}}
+            <a href="#" data-action="remove">
+              <i class="fa fa-trash"></i>
+              Удалить
+            </a>
           {{/if}}
         </li>
-      {{/unless}}
-    </ul>
-  </div>
+        {{#unless ctx.isSch}}
+          <li>
+            {{#if ctx.schOkAdm}}
+              <a href="#" data-action="schNotOk">
+                <i class="fa fa-fw"></i>
+                Убрать из под расписаня
+              </a>
+            {{else}}
+              {{#unless ctx.schOk}}
+                <a href="#" data-action="schOk">
+                  <i class="fa fa-fw"></i>
+                  Запись под расписанием (принудительно)
+                </a>
+              {{/unless}}
+            {{/if}}
+          </li>
+        {{/unless}}
+      </ul>
+    </div>
+  {{/if}}
 </template>
 
 <template name="social">
