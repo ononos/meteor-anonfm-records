@@ -30,6 +30,10 @@ var schema = new SimpleSchema({
     type: Boolean,
     optional: true,
   },
+  liked: {             // record file names, better than id of records
+    type: [String],
+    optional: true
+  }
 });
 
 Meteor.users.attachSchema(schema);
@@ -47,6 +51,10 @@ var tokens = new SimpleSchema({
   },
   lastUse: {
     type: Date
+  },
+  liked: {             // record file names, better than id of records
+    type: [String],
+    optional: true
   }
 });
 
