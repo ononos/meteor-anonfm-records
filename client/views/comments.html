@@ -18,7 +18,13 @@
 <template name="comment">
   <div class="wrapper">
     <div class="comment {{addClassIf rm "removed"}}">
-      <span class="nickname">{{Or username "Аноним"}}</span>
+      <span class="nickname">
+        {{Or username "Аноним"}}
+        {{userId}}
+        {{#if userTok}}
+          (Token: {{userTok}})
+        {{/if}}
+      </span>
       <span class="comment-date">{{formatDate t "YYYY MMM DD (ddd) HH:mm"}} ({{timeAgo t}})</span>
       {{#if isAdmin}}
         <a data-action="toggle-remove">
