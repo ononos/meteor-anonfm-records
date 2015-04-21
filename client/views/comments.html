@@ -4,6 +4,28 @@
     Назад
   </a>
 
+  <div class="row voffset">
+    <div class="col-md-12">
+      <table>
+        <thead>
+          <tr>
+            <th>Дата</th>
+            <th class="col-md-3">Диджей</th>
+            <th>Прод</th>
+            <th>Разм</th>
+            <th>Тип</th>
+            <th class="col-md-7">Запись</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#with record}}
+            {{> fileRow}}
+          {{/with}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   {{>newComment ctx=this}}
 
   <hr />
