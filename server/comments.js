@@ -8,7 +8,7 @@ Meteor.publish('comments', function(recordName) {
       commentsQuery = {record: recordName};
 
   if (!isAdminById(this.userId)) {
-    commentsOpts.fields = {userId: 0, userTop: 0};
+    commentsOpts.fields = {userId: 0, userTok: 0};
     commentsQuery.rm = {$ne: true};
   }
 
