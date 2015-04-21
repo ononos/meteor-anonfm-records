@@ -120,3 +120,26 @@ Template.fileRowActions.events({
     Records.update(this.ctx._id, {$unset: {schOkAdm: ""}});
   },
 });
+
+/*
+ * Social
+ */
+Template.social.helpers({
+  likedByMe: function() {
+    var user = Meteor.user();
+    if (user && user.liked)
+      return _.contains(user.liked, this.ctx.fname);
+    else
+      return false;
+  }
+});
+
+Template.social.events({
+  'click [data-action="toggle-like"]':
+  _.throttle(function()
+             {
+               console.log('likes', this.ctx);
+               Meteor.call('toggle-like', this.ctx.fname, Messages.error);
+             }, 500),
+  
+});

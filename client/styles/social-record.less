@@ -1,0 +1,66 @@
+
+// helper
+.animation(@animation) {
+    -webkit-animation: @animation;
+    -o-animation: @animation;
+    animation: @animation;
+}
+
+@soc-color: #333;
+@liked-color: #fa0;
+
+.likes{
+    cursor: pointer;
+    color: @soc-color;
+    &:hover {
+        text-decoration: underline;
+    }
+
+}
+
+.comments {
+    color: @soc-color;
+
+    a {
+        color: @soc-color;
+    }
+    a:link {
+        text-decoration: none;
+    }
+
+    a:visited {
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    a:active {
+        text-decoration: underline;
+    }
+}
+
+
+// liked star
+.liked {
+    color: @liked-color;
+    text-shadow: 1px -4px 6px #fff, 0 0 0 #000, 1px 4px 6px #fff;
+    .animation(liked linear .5s);
+}
+
+@-webkit-keyframes liked {.liked-keys;}
+@-o-keyframes liked {.liked-keys;}
+@keyframes liked {.liked-keys;}
+
+.liked-keys() {
+    0% {
+        color: black;
+    }
+    50% {
+        color: red;
+    }
+    100% {
+        color: @liked-color;
+    }
+}

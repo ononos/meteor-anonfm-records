@@ -135,8 +135,8 @@
 </template>
 
 <template name="social">
-  <span class="likes">
-    <i class="fa fa-star"></i>
+  <span class="likes" data-action="toggle-like">
+    <i class="fa fa-star {{addClassIf likedByMe "liked"}}"></i>
     {{Or ctx.likes 0}}
   </span>
   <span class="comments">
