@@ -39,6 +39,15 @@ Meteor.publish('currentUser', function() {
   return user;
 });
 
+Meteor.publish('currentToken', function(token) {
+  if (_.isUndefined(token))
+    return [];
+  var t = UserTokens.find({_id: token},
+                          {fields: {
+                            liked: true}});
+  return t;
+});
+
 // user related methods
 Meteor.methods({
   // create token

@@ -126,11 +126,7 @@ Template.fileRowActions.events({
  */
 Template.social.helpers({
   likedByMe: function() {
-    var user = Meteor.user();
-    if (user && user.liked)
-      return _.contains(user.liked, this.ctx.fname);
-    else
-      return false;
+    return _.contains(getMyLikedRecords(), this.ctx.fname);
   }
 });
 
@@ -139,7 +135,7 @@ Template.social.events({
   _.throttle(function()
              {
                console.log('likes', this.ctx);
-               Meteor.call('toggle-like', this.ctx.fname, Messages.error);
+               Meteor.call('toggle-like', this.ctx.fname, LOCAL_ID, Messages.error);
              }, 500),
   
 });

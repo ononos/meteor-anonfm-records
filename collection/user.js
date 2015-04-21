@@ -60,3 +60,23 @@ var tokens = new SimpleSchema({
 
 UserTokens = new Meteor.Collection('tokens');
 UserTokens.attachSchema(tokens);
+
+LOCAL_ID = undefined;
+
+// for not registered users create token and save it to localStorage
+if (Meteor.isClient)
+  Meteor.startup(function(){
+    LOCAL_ID = localStorage.getItem('my-id');
+    if(!LOCAL_ID) {
+      Meteor.call('gen-token', function(err, result) {
+        if (!err) {
+          LOCAL_ID = result;
+          localStorage.setItem('my-id', LOCAL_ID);
+        }
+      });
+    } else {
+      Meteor.call('refresh-token', LOCAL_ID);
+    }
+    if (LOCAL_ID)
+      Meteor.subscribe('currentToken', LOCAL_ID);
+  });
