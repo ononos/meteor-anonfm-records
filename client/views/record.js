@@ -5,6 +5,33 @@ Template.records.events({
   }
 });
 
+/*
+
+ Little perfomance trick, block distance computation (isLargeDistance) untill DOM rendered
+
+ Another solution  - find  way how to  stop recompute  when subscribed
+ Records incommming when route changed. Lot of find.sort recomputes.
+
+  When created  or destroyed  records template, set  it to  false, and
+  prevent isLargeDistance compute
+
+ */
+var recomputeDistance = new ReactiveVar();
+
+Template.records.created = function() {
+  recomputeDistance.set(false);
+};
+Template.records.rendered = function() {
+  console.log('rendered');
+  _.delay(function() {
+    console.log('recompute');
+    recomputeDistance.set(true);
+  }, 400);
+};
+Template.records.onDestroyed = function() {
+  recomputeDistance.set(false);
+};
+
 /* record row */
 Template.fileRow.helpers({
   created: function() {
@@ -40,6 +67,9 @@ Template.fileRow.helpers({
 
   // return true if prev record is >= 4 days
   isLargeDistance: function() {
+    // we recompute defered, after rendered DOM
+    if (!recomputeDistance.get())
+      return false;
     var prev = Records.findOne({t: {$lt: this.t}}, {sort: {t: -1}});
     return (prev &&
             +prev.t + 4 * 86400000 <
