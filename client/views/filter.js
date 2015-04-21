@@ -55,6 +55,10 @@ Template.DjListSelect.events({
 });
 
 Template.datePick.rendered = function() {
+  // remove old .datetimepicker elemends,  this is bug, datetimepicker
+  // create outside of this DOM tree, so can't be remove
+  $('.datetimepicker').remove();
+
   var datepicker = this.$('.date').datetimepicker({
     language: 'ru',
     format: 'yyyy-mm-dd hh:ii:ss',
