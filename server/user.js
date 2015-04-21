@@ -44,7 +44,7 @@ Meteor.methods({
   // create token
   'gen-token': function() {
     console.log(this.connection);
-    if (!Throttle.checkThenSet('gen-token/' + this.connection, 2, 60000)) {
+    if (!Throttle.checkThenSet('gen-token/' + this.connection.id, 2, 60000)) {
       throw new Meteor.Error(500, 'Under Heavy load');
     }
 
@@ -59,6 +59,10 @@ Meteor.methods({
   // keep alive this token, update lastUse date
   'refresh-token': function(tok) {
     check(tok, String);
-    return UserTokens.update(tok, {$set: {lastUse: new Date()}});
+    if (!Throttle.checkThenSet('update-tok/' + this.connection.id, 1, 60000)) {
+      throw new Meteor.Error(500, 'Under Heavy load');
+    }
+
+    UserTokens.update(tok, {$set: {lastUse: new Date()}});
   },
 });
