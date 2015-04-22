@@ -1,6 +1,11 @@
 <template name="myLiked">
 
-  {{>paginator route="myLiked" page=page pages=pages perPage=likesPerPage}}
-
-  {{>records records=records}}
+  {{#if pages}}
+    {{>paginator route="myLiked" page=page pages=pages}}
+  {{/if}}
+  {{#if haveRecords}}
+    {{>records records=records}}
+  {{else}}
+    Вы не выделили ни одной записи.
+  {{/if}}
 </template>
