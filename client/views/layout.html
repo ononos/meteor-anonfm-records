@@ -23,6 +23,11 @@
                 {{#if likes}}<span class="badge">{{likes}}</span>{{/if}}
               </a>
             </li>
+            <li>
+              <a href="{{pathFor "best"}}" data-toggle="tooltip" title="Что же больше всего лайкали">
+                Best
+              </a>
+            </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
               {{> loginButtons}}

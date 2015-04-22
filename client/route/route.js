@@ -71,4 +71,22 @@ Meteor.startup(function () {
              };
     }
   });
+
+  Router.route('/best', function (){
+    this.redirect('topBest', {page: "0"});
+  });
+
+  Router.route('/best/:page', {
+    name: "topBest",
+
+    waitOn: function() {
+      return Meteor.subscribe("best", this.params.page);
+    },
+
+    data: function() {
+      return { records: Records.find({}, {sort: [['likes', 'desc'], ['t', 'desc']]}),
+               page: this.params.page
+             };
+    }
+  });
 });
