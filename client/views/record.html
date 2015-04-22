@@ -1,7 +1,11 @@
-<template name="records">
+<template name="recordsTimes">
 
   {{> filter}}
 
+  {{> records}}
+</template>
+
+<template name="records">
   <table class="records">
     <thead>
       <tr>
@@ -21,10 +25,7 @@
           <td colspan="4">
             <div class="alert">
               <i class="fa fa-exclamation-triangle"></i>
-              Ненайдено записей,
-              <button class="btn btn-link" data-action="setDateNow">
-                кликни чтобы установить теперешнее время.
-              </button>
+              Ненайдено записей
             </div>
           </td>
         </tr>
