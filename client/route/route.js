@@ -1,3 +1,6 @@
+// date format for route /feed
+feedDateFormat = "YYYY-MM-DD__HH_mm_ss";
+
 Router.configure({
   layoutTemplate: 'appLayout',
   loadingTemplate: 'loading',
@@ -105,6 +108,27 @@ Meteor.startup(function () {
       return { records: Records.find({}, {sort: [['comments', 'desc'], ['t', 'desc']]}),
                page: this.params.page
              };
+    }
+  });
+
+  Router.route('/feed', function (){
+    this.redirect('latestFeed', {date: moment().format(feedDateFormat), dir: 'later'});
+  });
+
+  Router.route('/feed/:dir/:date', {
+    name: "latestFeed",
+
+    waitOn: function() {
+      var time = moment(this.params.date, feedDateFormat).valueOf(),
+          direction = (this.params.dir === 'later') ? false : true;
+
+      return Meteor.subscribe("record-feedback", time, direction);
+    },
+
+    data: function() {
+      return {
+        comments: Comments.find({}, {sort: {t: -1}})
+      };
     }
   });
 });

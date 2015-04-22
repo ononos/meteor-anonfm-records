@@ -4,7 +4,7 @@ Comments._ensureIndex({t: 1});
 Meteor.publish('comments', function(recordName) {
   check(recordName, String);
 
-  var commentsOpts = {limit: 500},
+  var commentsOpts = {limit: CFG.MaxComments},
       commentsQuery = {record: recordName};
 
   if (!isAdminById(this.userId)) {
@@ -16,6 +16,29 @@ Meteor.publish('comments', function(recordName) {
       comments = Comments.find(commentsQuery, commentsOpts);
 
   return [record, comments];
+});
+
+Meteor.publish('record-feedback', function(time, direction) {
+  console.log('record-feedback', time, direction);
+  var from = new Date(time);
+  if (_.isNaN(from.valueOf()))
+    return [];
+
+  var commentsOpts = {
+    limit: CFG.MaxComments / 2,
+    sort: {t: (direction) ? 1 : -1}
+  };
+  var commentsQuery = {
+    t: (direction) ? {$gte: from} :{$lte: from},
+  };
+
+  if (!isAdminById(this.userId)) {
+    commentsOpts.fields = {userId: 0, userTok: 0};
+    commentsQuery.rm = {$ne: true};
+  }
+
+  console.log('Comments.find', commentsQuery, commentsOpts);
+  return Comments.find(commentsQuery, commentsOpts);
 });
 
 Meteor.methods({

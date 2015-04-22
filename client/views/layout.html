@@ -23,6 +23,11 @@
                 {{#if likes}}<span class="badge">{{likes}}</span>{{/if}}
               </a>
             </li>
+            <li class="{{activeRouteAt "/feed"}}">
+              <a href="{{pathFor "feed"}}" data-toggle="tooltip" title="Последнии коментарии">
+                Comments
+              </a>
+            </li>
             <li class="{{activeRouteAt "/best"}}">
               <a href="{{pathFor "best"}}" data-toggle="tooltip" title="Что же больше всего лайкали">
                 Best
