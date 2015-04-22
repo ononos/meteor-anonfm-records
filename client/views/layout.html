@@ -17,19 +17,19 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="collapse-navbar">
           <ul class="nav navbar-nav">
-            <li>
+            <li class={{activeRouteAt "/liked"}}>
               <a href="{{pathFor "liked"}}" data-toggle="tooltip" title="Ваши лайки">
                 Favorites
                 {{#if likes}}<span class="badge">{{likes}}</span>{{/if}}
               </a>
             </li>
-            <li>
+            <li class="{{activeRouteAt "/best"}}">
               <a href="{{pathFor "best"}}" data-toggle="tooltip" title="Что же больше всего лайкали">
                 Best
                 <span class="badge">{{getPublishedCount 'best'}}</span>
               </a>
             </li>
-            <li>
+            <li class="{{activeRouteAt "/commented"}}">
               <a href="{{pathFor "commented"}}" data-toggle="tooltip" title="Записи с обсуждением">
                 Top commented
                 <span class="badge">{{getPublishedCount 'commentedNum'}}</span>
