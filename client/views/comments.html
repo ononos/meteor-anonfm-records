@@ -47,7 +47,7 @@
           (Token: {{userTok}})
         {{/if}}
       </span>
-      <span class="comment-date">{{formatDate t "YYYY MMM DD (ddd) HH:mm"}} ({{timeAgo t}})</span>
+      <span class="comment-date">{{formatDate t "YYYY MMM (ddd) DD HH:mm"}} ({{timeAgo t}})</span>
       {{#if isAdmin}}
         <a data-action="toggle-remove">
           {{#if rm}}Restore{{else}}Remove{{/if}}
