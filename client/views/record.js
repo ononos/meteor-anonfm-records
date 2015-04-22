@@ -18,6 +18,13 @@ Template.records.events({
  */
 var recomputeDistance = new ReactiveVar();
 
+/*
+
+ Base template for showing record list
+
+ {{> records records=records showDistance=true}}
+
+*/
 Template.records.created = function() {
   recomputeDistance.set(false);
 };
@@ -67,6 +74,8 @@ Template.fileRow.helpers({
 
   // return true if prev record is >= 4 days
   isLargeDistance: function() {
+    if (!Template.parentData(1).showDistance)
+      return false;
     // we recompute defered, after rendered DOM
     if (!recomputeDistance.get())
       return false;
@@ -125,7 +134,6 @@ Template.largeDistance.helpers({
   // return text duration between this and prev record
   prevRecDistance: function() {
     var prev = Records.findOne({t: {$lt: this.t}}, {sort: {t: -1}});
-    console.log("prevRecDistance");
     return moment.duration(moment(this.t).diff(prev.t)).humanize();
   },
 });

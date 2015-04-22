@@ -29,7 +29,9 @@ Meteor.startup(function () {
              ];
     },
     data: function() {
-      return Records.find({},{sort: {t: -1}});
+      return {
+        records: Records.find({},{sort: {t: -1}})
+      };
     }
   });
 

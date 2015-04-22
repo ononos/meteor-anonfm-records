@@ -2,7 +2,7 @@
 
   {{> filter}}
 
-  {{> records}}
+  {{> records records=records showDistance=true}}
 </template>
 
 <template name="records">
@@ -18,7 +18,7 @@
       </tr>
     </thead>
     <tbody>
-      {{#each this}}
+      {{#each records}}
         {{> fileRow}}
       {{else}}
         <tr>
