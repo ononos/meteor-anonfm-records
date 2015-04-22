@@ -1,0 +1,8 @@
+<template name="myLiked">
+
+  {{>paginator route="myLiked" page=page pages=pages perPage=likesPerPage}}
+
+  {{#with records}}
+    {{>records}}
+  {{/with}}
+</template>
