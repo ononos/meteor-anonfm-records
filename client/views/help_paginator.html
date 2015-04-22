@@ -1,0 +1,19 @@
+<template name="paginator">
+  <ul class="pagination">
+    {{#if farFromStart}}
+      <li>
+        <a href="{{pathFor route=route page=0}}">&laquo;</a>
+      </li>
+    {{/if}}
+    {{#each neighborhood}}
+      <li class="{{addClassIf isThisPage "active"}}">
+        <a href={{pathFor route=../route page=this}}>{{this}}</a>
+      </li>
+    {{/each}}
+    {{#if farToEnd}}
+      <li>
+        <a href="{{pathFor route=route page=lastPage}}">&raquo;</a>
+      </li>
+    {{/if}}
+  </ul>
+</template>
