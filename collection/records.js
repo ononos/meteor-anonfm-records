@@ -95,4 +95,5 @@ if (Meteor.isServer) {
   Records._ensureIndex({dj: 1, t: 1});
   Records._ensureIndex({t: 1});
   Records._ensureIndex({dj: 1});
+  Records._ensureIndex({isSch: -1, likes: -1, t: -1});
 }

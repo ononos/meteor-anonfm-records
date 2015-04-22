@@ -72,6 +72,9 @@ Meteor.publish("files-after-ts", function(timefrom, dj, limit) {
 Meteor.publish("my-liked", function(userToken, page) {
   page = Number(page);
 
+  if (page < 0)
+  return [];
+
   var liked = [],
       pageSize = CFG.MaxRecs,
       startFrom = pageSize * (page || 0);
@@ -89,14 +92,26 @@ Meteor.publish("my-liked", function(userToken, page) {
   else
     return [];
 
-  console.log('liked1',startFrom, startFrom + pageSize, liked);
   liked = liked.slice(startFrom, startFrom + pageSize);
-  console.log('liked2',liked);
   var query = {fname: {$in: liked}};
   if (!isAdminById(this.userId))
     query.rm = {$ne: true};
 
   return Records.find(query);
+});
+
+Meteor.publish("best", function(page) {
+  page = Number(page);
+
+  if (page > 20 || page < 0)    // limit
+    return [];
+
+  return Records.find({isSch: false},
+                      {
+                        skip: page * CFG.MaxRecs,
+                        limit: CFG.MaxRecs,
+                        sort: [['likes', 'desc'], ['t', 'desc']],
+                     });
 });
 
 Meteor.publish("sources", function() {
