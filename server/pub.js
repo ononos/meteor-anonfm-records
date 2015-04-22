@@ -69,6 +69,36 @@ Meteor.publish("files-after-ts", function(timefrom, dj, limit) {
   return Records.find(query, {sort: {t: 1 }, limit: limit});
 });
 
+Meteor.publish("my-liked", function(userToken, page) {
+  page = Number(page);
+
+  var liked = [],
+      pageSize = CFG.MaxRecs,
+      startFrom = pageSize * (page || 0);
+
+  // get user's liked records array. it may be in users, or usertokens collection
+  var u;
+  if (this.userId)
+    u = Meteor.users.findOne(this.userId, {fields: {liked: 1}});
+  if (!u) {
+    if (userToken)
+      u = UserTokens.findOne(userToken);
+  }
+  if (u && u.liked)
+    liked = u.liked;
+  else
+    return [];
+
+  console.log('liked1',startFrom, startFrom + pageSize, liked);
+  liked = liked.slice(startFrom, startFrom + pageSize);
+  console.log('liked2',liked);
+  var query = {fname: {$in: liked}};
+  if (!isAdminById(this.userId))
+    query.rm = {$ne: true};
+
+  return Records.find(query);
+});
+
 Meteor.publish("sources", function() {
   var query = {},
       options = {};
