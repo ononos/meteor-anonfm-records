@@ -14,7 +14,9 @@
     <div class="col-md-12">
       Сейчас:
       {{#with currentRecord}}
-        {{>btnThisDj dj=dj}}
+        <span class="dj">
+          {{>btnThisDj dj=dj}}
+        </span>
         <span class="filename">{{fname}}</span>
         {{>social ctx=this}}
         {{>recordSources}}
@@ -23,7 +25,9 @@
     <div class="col-md-12">
       Потом будет:
       {{#with nextRecord}}
-        {{dj}}
+        <span class="dj">
+          {{dj}}
+        </span>
         <span class="filename">{{fname}}</span>
         {{>social ctx=this}}
         {{>recordSources}}
@@ -37,10 +41,14 @@
 </template>
 
 <template name="btnThisDj">
-  <button data-action="toggle-dj"
-          data-toggle="tooltip" data-title="Играть следующий только этого dj"
-          data-placement="right"
-          class="btn btn-sm btn-default {{addClassIf nextDjOnly "active"}}" autocomplete="off">
+  <span data-action="toggle-dj"
+       data-toggle="tooltip" data-title="Играть следующий только этого dj"
+       data-placement="right">
     {{dj}}
-  </button>
+    {{#if nextDjOnly}}
+      <i class="fa fa-toggle-on"></i>
+    {{else}}
+      <i class="fa fa-toggle-off"></i>
+    {{/if}}
+  </span>
 </template>
