@@ -47,7 +47,6 @@ Meteor.publish("files-before-ts", function(timefrom, dj, limit) {
   if (!isAdminById(this.userId))
     query.rm = {$ne: true};
 
-  console.log(query, {sort: {t: -1 }, limit: limit});
   return Records.find(query, {sort: {t: -1 }, limit: limit});
 });
 
@@ -65,7 +64,6 @@ Meteor.publish("files-after-ts", function(timefrom, dj, limit) {
   if (!isAdminById(this.userId))
     query.rm = {$ne: true};
 
-  console.log(query, {sort: {t: 1 }, limit: limit});
   return Records.find(query, {sort: {t: 1 }, limit: limit});
 });
 

@@ -52,7 +52,6 @@ Meteor.publish('currentToken', function(token) {
 Meteor.methods({
   // create token
   'gen-token': function() {
-    console.log(this.connection);
     if (!Throttle.checkThenSet('gen-token/' + this.connection.id, 2, 60000)) {
       throw new Meteor.Error(500, 'Under Heavy load');
     }

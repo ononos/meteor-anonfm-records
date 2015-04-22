@@ -25,7 +25,7 @@
             </li>
             <li class="{{activeRouteAt "/feed"}}">
               <a href="{{pathFor "feed"}}" data-toggle="tooltip" title="Последнии коментарии">
-                Comments
+                Feed
               </a>
             </li>
             <li class="{{activeRouteAt "/best"}}">
@@ -35,8 +35,8 @@
               </a>
             </li>
             <li class="{{activeRouteAt "/commented"}}">
-              <a href="{{pathFor "commented"}}" data-toggle="tooltip" title="Записи с обсуждением">
-                Top commented
+              <a href="{{pathFor "commented"}}" data-toggle="tooltip" title="Записи что обсуждались">
+                Commented
                 <span class="badge">{{getPublishedCount 'commentedNum'}}</span>
               </a>
             </li>

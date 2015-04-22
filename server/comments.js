@@ -19,7 +19,6 @@ Meteor.publish('comments', function(recordName) {
 });
 
 Meteor.publish('record-feedback', function(time, direction) {
-  console.log('record-feedback', time, direction);
   var from = new Date(time);
   if (_.isNaN(from.valueOf()))
     return [];
@@ -37,7 +36,6 @@ Meteor.publish('record-feedback', function(time, direction) {
     commentsQuery.rm = {$ne: true};
   }
 
-  console.log('Comments.find', commentsQuery, commentsOpts);
   return Comments.find(commentsQuery, commentsOpts);
 });
 

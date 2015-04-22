@@ -29,9 +29,7 @@ Template.records.created = function() {
   recomputeDistance.set(false);
 };
 Template.records.rendered = function() {
-  console.log('rendered');
   _.delay(function() {
-    console.log('recompute');
     recomputeDistance.set(true);
   }, 400);
 };
@@ -172,7 +170,6 @@ Template.social.events({
   'click [data-action="toggle-like"]':
   _.throttle(function()
              {
-               console.log('likes', this.ctx);
                Meteor.call('toggle-like', this.ctx.fname, LOCAL_ID, Messages.error);
              }, 500),
   

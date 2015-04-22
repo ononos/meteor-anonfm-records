@@ -1,4 +1,8 @@
 <template name="topCommented">
+  {{>backToRecords}}
+
+  <h3>Записи отсортированы по количеству комментариев к ним</h3>
+
   {{>paginator route="comments" page=page pages=pages}}
 
   {{>records records=records}}

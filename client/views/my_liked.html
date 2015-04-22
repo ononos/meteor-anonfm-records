@@ -1,4 +1,7 @@
 <template name="myLiked">
+  {{>backToRecords}}
+
+  <h3>Отмеченые вами записи</h3>
 
   {{#if pages}}
     {{>paginator route="myLiked" page=page pages=pages}}

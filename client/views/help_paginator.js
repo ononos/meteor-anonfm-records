@@ -36,8 +36,6 @@ Template.paginator.helpers({
       }
     }
       
-
-    console.log('from', from, 'to', to, '++ delta', need_delta);
     return _.range(from, to + 1);
   },
   isThisPage: function() {
