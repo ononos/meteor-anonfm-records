@@ -89,4 +89,22 @@ Meteor.startup(function () {
              };
     }
   });
+
+  Router.route('/commented', function (){
+    this.redirect('topCommented', {page: "0"});
+  });
+
+  Router.route('/commented/:page', {
+    name: "topCommented",
+
+    waitOn: function() {
+      return Meteor.subscribe("top-commented", this.params.page);
+    },
+
+    data: function() {
+      return { records: Records.find({}, {sort: [['comments', 'desc'], ['t', 'desc']]}),
+               page: this.params.page
+             };
+    }
+  });
 });

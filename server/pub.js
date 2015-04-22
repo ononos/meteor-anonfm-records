@@ -114,6 +114,20 @@ Meteor.publish("best", function(page) {
                      });
 });
 
+Meteor.publish("top-commented", function(page) {
+  page = Number(page);
+
+  if (page > 20 || page < 0)    // limit
+    return [];
+
+  return Records.find({isSch: false},
+                      {
+                        skip: page * CFG.MaxRecs,
+                        limit: CFG.MaxRecs,
+                        sort: [['comments', 'desc'], ['t', 'desc']],
+                     });
+});
+
 Meteor.publish("sources", function() {
   var query = {},
       options = {};
