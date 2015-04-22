@@ -103,10 +103,10 @@ Meteor.publish("my-liked", function(userToken, page) {
 Meteor.publish("best", function(page) {
   page = Number(page);
 
-  if (page > 20 || page < 0)    // limit
+  if (page > CFG.MaxPages || page < 0)    // limit
     return [];
 
-  return Records.find({isSch: false},
+  return Records.find({likes: {$gt: 0}},
                       {
                         skip: page * CFG.MaxRecs,
                         limit: CFG.MaxRecs,
@@ -117,10 +117,10 @@ Meteor.publish("best", function(page) {
 Meteor.publish("top-commented", function(page) {
   page = Number(page);
 
-  if (page > 20 || page < 0)    // limit
+  if (page > CFG.MaxPages || page < 0)    // limit
     return [];
 
-  return Records.find({isSch: false},
+  return Records.find({comments: {$gt: 0}},
                       {
                         skip: page * CFG.MaxRecs,
                         limit: CFG.MaxRecs,
@@ -128,7 +128,7 @@ Meteor.publish("top-commented", function(page) {
                      });
 });
 
-Meteor.publish("sources", function() {
+Meteor.publish("core", function() {
   var query = {},
       options = {};
 
@@ -136,6 +136,14 @@ Meteor.publish("sources", function() {
     query.rm = {$ne: true};
     options.fields = {url: 1, title: 1};
   }
+
+  Counts.publish(this, 'best',
+                 Records.find({likes: {$gt: 0}}),
+                 { noReady: true });
+
+  Counts.publish(this, 'commentedNum',
+                 Records.find({comments: {$gt: 0}}),
+                 { noReady: true });
 
   return Sources.find(query, options);
 });

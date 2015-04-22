@@ -26,11 +26,13 @@
             <li>
               <a href="{{pathFor "best"}}" data-toggle="tooltip" title="Что же больше всего лайкали">
                 Best
+                <span class="badge">{{getPublishedCount 'best'}}</span>
               </a>
             </li>
             <li>
               <a href="{{pathFor "commented"}}" data-toggle="tooltip" title="Записи с обсуждением">
                 Top commented
+                <span class="badge">{{getPublishedCount 'commentedNum'}}</span>
               </a>
             </li>
           </ul>
