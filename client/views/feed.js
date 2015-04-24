@@ -4,14 +4,14 @@ Template.latestFeed.helpers({
     if (c)
       return moment(c.t).format(feedDateFormat);
     else 
-      return moment().format(feedDateFormat);
+      return false;
   },
   lastDate: function() {
     var c = Comments.findOne({}, {sort: {t: -1}});
     if (c)
       return moment(c.t).format(feedDateFormat);
     else 
-      return '';
+      return false;
   },
 
 });
