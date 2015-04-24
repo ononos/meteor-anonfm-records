@@ -39,9 +39,23 @@
     <div class="comment {{addClassIf rm "removed"}}">
       <span class="nickname">
         {{Or username "Аноним"}}
-        {{userId}}
-        {{#if userTok}}
-          (Token: {{userTok}})
+        {{#if isAdmin}}
+          {{userId}}
+          {{#if userTok}}
+            (Token: {{userTok}})
+          {{/if}}
+          {{ip}}
+          ::
+          {{#if authorBanned}}
+            <a data-action="unban">
+              Unban user
+            </a>
+            (Бан еще на {{bannedExpire}})
+          {{else}}
+            <a data-action="ban">
+              Ban
+            </a>
+          {{/if}}
         {{/if}}
       </span>
       <span class="comment-date">{{formatDate t "YYYY MMM (ddd) DD HH:mm"}} ({{timeAgo t}})</span>
@@ -54,6 +68,9 @@
         </a>
       {{/if}}
       <div class="comment-body">
+        {{#if showBanForm}}
+          {{>banCommentAuthor ctx=this showBanFormVar=showBanFormVar}}
+        {{/if}}
         <div class="marked">{{{textHTML}}}</div>
       </div>
     </div>
@@ -88,4 +105,29 @@
       </div>
     </div>
   </div>
+</template>
+
+<template name="banCommentAuthor">
+    <div>
+      <form class="form-horizontal">
+        <div class="form-group">
+          <textarea class="form-control">Разжигание радиочановской розни</textarea>
+        </div>
+        <div class="form-group">
+          <select class="form-control">
+            <option value="3600">час</option>
+            <option value="86400">день</option>
+            <option value="172800">2 дня</option>
+            <option value="604800">7 дня</option>
+            <option value="2592000">30 дней</option>
+            <option value="31449600">Год</option>
+          </select>
+          <div class="btn-group">
+            <button data-action="commit-ban" type="submit" class="btn btn-warning">
+              Забанить
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
 </template>

@@ -10,6 +10,25 @@ Router.configure({
   }
 });
 
+// Note: controller required data().comments
+CommentController = RouteController.extend({
+    subscriptions: function() {
+      // let's make sure that the comment subscription is ready and the loaded
+      if (isAdmin() &&
+          this.data()) {
+        var comments = this.data().comments;
+        // we can then extract the userIds and Ip the authors
+        // and add the authors subscription to the route's waiting list as well
+        this.subscribe('bans',
+                       {
+                         ips: _.unique(comments.map(function(c) { return c.ip;})),
+                         userIds: _.unique(comments.map(function(c) { return mkBanUserIdSlug(c.userId, c.userTok);})),
+                       })
+          .wait();
+      }
+    },
+});
+
 
 Meteor.startup(function () {
 
@@ -40,6 +59,8 @@ Meteor.startup(function () {
 
   Router.route('/comments/:record', {
     name: "comments",
+ 
+    controller: "CommentController",
 
     waitOn: function() {
       return Meteor.subscribe('comments', this.params.record);
@@ -54,8 +75,8 @@ Meteor.startup(function () {
         record: record,
         comments: Comments.find({}, {sort: {t: -1}})
       };
-    }
-  });
+    },
+  }),
 
   Router.route('/liked', function (){
     this.redirect('myLiked', {page: "0"});
@@ -118,17 +139,18 @@ Meteor.startup(function () {
   Router.route('/feed/:dir/:date', {
     name: "latestFeed",
 
+    controller: "CommentController",
+
     waitOn: function() {
       var time = moment(this.params.date, feedDateFormat).valueOf(),
           direction = (this.params.dir === 'later') ? false : true;
 
       return Meteor.subscribe("record-feedback", time, direction);
     },
-
     data: function() {
       return {
         comments: Comments.find({}, {sort: {t: -1}})
       };
-    }
+    },
   });
 });

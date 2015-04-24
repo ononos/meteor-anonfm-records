@@ -5,7 +5,7 @@ var schema = new SimpleSchema({
   ip: {
     type: String,
   },
-  userId: {
+  userId: {                     // slug, 't' + token or 'i' + Meteor.userId(). Use mkBanUserIdSlug()
     type: String,
   },
   expire: {
@@ -29,3 +29,8 @@ if (Meteor.isServer) {
   Bans._ensureIndex({userId: 1});
   Bans._ensureIndex({expire: 1}, {expireAfterSeconds: 0});
 }
+
+// make userId slug for ban record
+mkBanUserIdSlug = function(userId, token) {
+  return userId ? 'i' + userId : 't' + token;
+};

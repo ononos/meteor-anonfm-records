@@ -39,12 +39,9 @@ methodCheckBan = function(userToken) {
   var userId = this.userId,
       ip = headers.methodClientIP(this),
       userTokenRecord = userId ? "" : getUserFromTokenAndCheck(userToken),
-      userIdSlug = 'i' + userId;
+      userIdSlug = mkBanUserIdSlug(userId, userToken);
   
-  if (!userId) {
-    if (userTokenRecord)
-      userIdSlug = 't' + userToken;
-    else
+  if (!userId && !userTokenRecord) {
       throw new Meteor.Error(401); // no token? strange
   }
 
@@ -113,6 +110,26 @@ Meteor.publish('currentToken', function(token) {
   return t;
 });
 
+/**
+ * @param {ips: array, userIds: array} userData
+ */
+Meteor.publish('bans', function(userData) {
+  if (!isAdminById(this.userId)) {
+    return [];
+  }
+  console.log('ips', userData.ips);
+  console.log('join:', {$or:
+                    [
+                      {ip: {$in: userData.ips}},
+                      {userId: {$in: userData.userIds}}
+                    ]});
+  return Bans.find({$or:
+                    [
+                      {ip: {$in: _.unique(userData.ips)}},
+                      {userId: {$in: _.unique(userData.userIds)}}
+                    ]});
+});
+
 // user related methods
 Meteor.methods({
   // create token
@@ -138,4 +155,13 @@ Meteor.methods({
 
     UserTokens.update(tok, {$set: {lastUse: new Date()}});
   },
+
+  'remove-bans': function(ip, userIdSlug) {
+    console.log('remove-bans', ip, userIdSlug);
+    if (_.isString(ip))
+      Bans.remove({ip: ip});
+
+    if (_.isString(userIdSlug))
+      Bans.remove({userId: userIdSlug});
+  }
 });
