@@ -51,19 +51,10 @@ Meteor.methods({
     if (text.length > 5 * 1024)
       throw new Meteor.Error(400, 'Сообщение слишком длинное');
 
-    var userId = this.userId,
-        userTok;
-    if (!userId) {
-      var t = checkUserToken(userToken);
-      if (!t)
-        throw new Meteor.Error(500);
-      userTok = t._id;
-    }
-    var userIdorTok = userId || 't' + userTok;
-
-    if (!Throttle.checkThenSet('com-' + userIdorTok, 1, 10000)) {
-      throw new Meteor.Error(500, 'Under Heavy load');
-    }
+    var checkedUser = methodThrottleBan.call(this, 'com-', userToken,
+                                             4, 10000,
+                                             moment.duration({'days' : 30}),
+                                             "Через чур много постов");
 
     // make sure there no more 
     var commentsCount = Comments.find({record: recordName}).count();
@@ -75,8 +66,9 @@ Meteor.methods({
                                   t: new Date(),
                                   username: nick,
                                   textHTML: marked(text),
-                                  userId: userId,
-                                  userTok: userTok
+                                  userId: this.userId,
+                                  userTok: userToken,
+                                  ip: checkedUser.ip,
                                 });
     if (comId)
       Records.update({fname: recordName}, {$inc: {comments: 1}});

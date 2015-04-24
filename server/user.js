@@ -17,17 +17,82 @@ Accounts.onCreateUser(function(options, user) {
   return user;
 });
 
+// Helper.
 // return token UserTokens record or null if not found and not ready
-checkUserToken = function(userToken) {
+function getUserFromTokenAndCheck(userToken) {
   if (_.isUndefined(userToken))
     return false;
   // try find user with that token. make sure token old (15min)
   var u = UserTokens.findOne(userToken);
-  
-  if (!(u && u.created < new Date() - 15 * 60000))
-    return false;
+  console.log('check', +u.created,  +new Date() - 15 * 60000);
+  if (!u || (+u.created > +new Date() - 15 * 60000))
+    throw new Meteor.Error(500, 'Вы похоже совсем не давно здесь. Нюфагу лучше осмотреться.');
 
   return u;
+}
+
+/**
+ * Check user for ban
+ *
+ */
+methodCheckBan = function(userToken) {
+  var userId = this.userId,
+      ip = headers.methodClientIP(this),
+      userTokenRecord = userId ? "" : getUserFromTokenAndCheck(userToken),
+      userIdSlug = 'i' + userId;
+  
+  if (!userId) {
+    if (userTokenRecord)
+      userIdSlug = 't' + userToken;
+    else
+      throw new Meteor.Error(401); // no token? strange
+  }
+
+  var BanRecord = Bans.findOne({$or: [{ip: ip}, {userId: userIdSlug}]});
+
+  if (BanRecord)
+    throw new Meteor.Error(403, 'Вы забанены. Причина: "' + BanRecord.reason +
+                           '". Бан действует на <strong>' +
+                           moment.duration(moment().diff(BanRecord.expire)).humanize() + '</strong>');
+
+  return { ip: ip,
+           userId: userIdSlug
+         };
+};
+
+/**
+ * Throttle user activity and ban
+ * @this Meteor.method
+ *
+ * @param {string} throttlePrefix - short throttle prefix
+ * @param {string} userToken
+ * @param {number} allowedCount
+ * @param {number} expireInMS
+ * @param {(number|moment.duration())} banExpire
+ * @param {string} banReason
+ *
+ * @return {{ip, userId}} Where where userId is 't' + token or 'i' + userId
+ *
+ * @throws {Meteor.Error} Ban reason
+ */
+methodThrottleBan = function(throttlePrefix, userToken, allowedCount, expireInMS, banExpire, banReason) {
+  var checkedUser = methodCheckBan.call(this, userToken);
+
+  if (!Throttle.checkThenSet(throttlePrefix + checkedUser.ip, allowedCount, expireInMS) ||
+      !Throttle.checkThenSet(throttlePrefix + checkedUser.userId, allowedCount, expireInMS)) {
+
+    var expire = moment().add(banExpire).toDate();
+    Bans.insert({
+      ip: checkedUser.ip,
+      userId: checkedUser.userId,
+      expire: expire,
+      reason: banReason
+    });
+
+    throw new Meteor.Error(500, 'Вы забанены на ' +
+                           moment.duration(moment().diff(expire)).humanize() + '. Причина: ' + banReason);
+  }
+  return checkedUser;
 };
 
 // publish current user's data

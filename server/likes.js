@@ -5,6 +5,11 @@ Meteor.methods({
 
     var addOrSubLike, userCollection, id;
 
+    var checkedUser = methodThrottleBan.call(this, 'like-', token,
+                                             20, 10000,
+                                             moment.duration({'days' : 2}),
+                                             "Лайк вайпинг");
+
     if (this.userId) {
       var u = Meteor.users.findOne(this.userId, {fields: {liked: 1}});
       if (!u)

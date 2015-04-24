@@ -17,6 +17,9 @@ var schema = new SimpleSchema({
     type: String,
     optional: true
   },
+  ip: {
+    type: String,
+  },
   username: {
     type: String,
     optional: true
