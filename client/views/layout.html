@@ -49,6 +49,15 @@
     </nav>
 
     <main>
+      {{#unless connected}}
+        <div class="panel panel-danger">
+          <div class="panel-body">
+            <p>Trying to connect</p>
+            <p>There seems to be a connection issue</p>
+          </div>
+        </div>
+      {{/unless}}
+
       {{>player}}
       {{>yield}}
     </main>
