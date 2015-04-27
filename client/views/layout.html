@@ -1,53 +1,57 @@
 <template name="appLayout">
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapse-navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Anon.fm records</a>
+      </div>
+      
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="collapse-navbar">
+        <ul class="nav navbar-nav">
+          <li class={{activeRouteAt "/records"}}>
+            <a href="{{pathFor "records" dj="!all"}}" data-toggle="tooltip" title="Перейти к записям">
+              Records
+            </a>
+          </li>
+          <li class={{activeRouteAt "/liked"}}>
+            <a href="{{pathFor "liked"}}" data-toggle="tooltip" title="Ваши лайки">
+              Favorites
+              {{#if likes}}<span class="badge">{{likes}}</span>{{/if}}
+            </a>
+          </li>
+          <li class="{{activeRouteAt "/feed"}}">
+            <a href="{{pathFor "feed"}}" data-toggle="tooltip" title="Последнии коментарии">
+              Feed
+            </a>
+          </li>
+          <li class="{{activeRouteAt "/best"}}">
+            <a href="{{pathFor "best"}}" data-toggle="tooltip" title="Что же больше всего лайкали">
+              Best
+              <span class="badge">{{getPublishedCount 'best'}}</span>
+            </a>
+          </li>
+          <li class="{{activeRouteAt "/commented"}}">
+            <a href="{{pathFor "commented"}}" data-toggle="tooltip" title="Записи что обсуждались">
+              Commented
+              <span class="badge">{{getPublishedCount 'commentedNum'}}</span>
+            </a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          {{> loginButtons}}
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+
   <div class="container">
-
-    <nav class="navbar navbar-default" role="navigation">
-      <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapse-navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/">Anon.fm records</a>
-        </div>
-        
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="collapse-navbar">
-          <ul class="nav navbar-nav">
-            <li class={{activeRouteAt "/liked"}}>
-              <a href="{{pathFor "liked"}}" data-toggle="tooltip" title="Ваши лайки">
-                Favorites
-                {{#if likes}}<span class="badge">{{likes}}</span>{{/if}}
-              </a>
-            </li>
-            <li class="{{activeRouteAt "/feed"}}">
-              <a href="{{pathFor "feed"}}" data-toggle="tooltip" title="Последнии коментарии">
-                Feed
-              </a>
-            </li>
-            <li class="{{activeRouteAt "/best"}}">
-              <a href="{{pathFor "best"}}" data-toggle="tooltip" title="Что же больше всего лайкали">
-                Best
-                <span class="badge">{{getPublishedCount 'best'}}</span>
-              </a>
-            </li>
-            <li class="{{activeRouteAt "/commented"}}">
-              <a href="{{pathFor "commented"}}" data-toggle="tooltip" title="Записи что обсуждались">
-                Commented
-                <span class="badge">{{getPublishedCount 'commentedNum'}}</span>
-              </a>
-            </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-              {{> loginButtons}}
-          </ul>
-        </div><!-- /.navbar-collapse -->
-      </div><!-- /.container-fluid -->
-    </nav>
-
     <main>
       {{#unless connected}}
         <div class="panel panel-danger">
@@ -62,4 +66,27 @@
       {{>yield}}
     </main>
   </div>
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 save_and_resc">
+          <a href="{{pathFor route="save_and_protect"}}">
+            <img src="/save_and_protect.png" />
+            <span>Помочь проекту</span>
+          </a>
+        </div>
+        <div class="col-md-6">
+          <div class="col-md-12">
+            text1
+          </div>
+          <div class="col-md-12">
+            text2
+          </div>
+          <div class="col-md-12">
+            text2
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
 </template>
