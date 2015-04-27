@@ -4,8 +4,11 @@ schema.source = new SimpleSchema({
   id: {                         // foreign key to Sources._id
     type: Meteor.Collection.ObjectID
   },
-  url: {
+  url: {                        // google drive only
     type: String,
+  },
+  folder: {                     // google drive only
+    type: String
   },
   rm: {
     type: Boolean
@@ -60,7 +63,7 @@ schema.main = new SimpleSchema({
   bitrate: {
     type: Number
   },
-  hasPreview: {
+  preview: {
     type: Boolean
   },
 
