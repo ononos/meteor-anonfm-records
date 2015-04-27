@@ -154,4 +154,8 @@ Meteor.startup(function () {
       };
     },
   });
+
+  Router.route('/save_and_protect', {
+  });
+
 });
