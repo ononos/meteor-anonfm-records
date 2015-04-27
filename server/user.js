@@ -24,7 +24,6 @@ function getUserFromTokenAndCheck(userToken) {
     return false;
   // try find user with that token. make sure token old (15min)
   var u = UserTokens.findOne(userToken);
-  console.log('check', +u.created,  +new Date() - 15 * 60000);
   if (!u || (+u.created > +new Date() - 15 * 60000))
     throw new Meteor.Error(500, 'Вы похоже совсем не давно здесь. Нюфагу лучше осмотреться.');
 

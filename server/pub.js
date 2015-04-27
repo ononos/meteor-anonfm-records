@@ -149,6 +149,13 @@ Meteor.publish("core", function() {
 Meteor.methods({
   djnames : function () {
     // TODO: cache this
-    return Records.aggregate([{ $group : {_id : "$dj", count: { $sum: 1 } } }]);
+    return Stats.perDj.find().fetch();
+  },
+
+  'get-stats': function() {
+
+    return {
+      perDj: Stats.perDj.find({}, {sort: {count: -1}}).fetch(),
+    };
   }
 });
