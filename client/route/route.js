@@ -4,6 +4,7 @@ feedDateFormat = "YYYY-MM-DD__HH_mm_ss";
 Router.configure({
   layoutTemplate: 'appLayout',
   loadingTemplate: 'loading',
+  notFoundTemplate: '404',
   waitOn: function() {
     return [ Meteor.subscribe('core'),
              Meteor.subscribe('currentUser')];
