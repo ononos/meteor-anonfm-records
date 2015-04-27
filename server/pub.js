@@ -146,16 +146,90 @@ Meteor.publish("core", function() {
   return Sources.find(query, options);
 });
 
+var AGGREGATE_CACHE = {};
+
+// clear cache each hour
+Meteor.setInterval(function() {  AGGREGATE_CACHE = {}; }, 3600000);
+
+// dj record count
+function get_dj_stats() {
+  if (!AGGREGATE_CACHE.djstats)
+    AGGREGATE_CACHE.djstats = Records.aggregate(
+      [
+        { '$match': { isSch: { '$ne': true } } },
+        {
+          '$group': {
+            _id      : '$dj',
+            count    : { '$sum': 1 },
+            duration : { '$sum': '$duration' }
+          }
+        },
+        {'$sort': {count: -1}}
+      ]);
+  return AGGREGATE_CACHE.djstats;
+}
+
+function get_dj_stats() {
+  if (!AGGREGATE_CACHE.djstats)
+    AGGREGATE_CACHE.djstats = Records.aggregate(
+      [
+        { '$match': { isSch: { '$ne': true } } },
+        {
+          '$group': {
+            _id      : '$dj',
+            count    : { '$sum': 1 },
+            duration : { '$sum': '$duration' }
+          }
+        },
+        {'$sort': {count: -1}}
+      ]);
+  return AGGREGATE_CACHE.djstats;
+}
+
+function get_weekstats() {
+  if (!AGGREGATE_CACHE.weekstats)
+    AGGREGATE_CACHE.weekstats = Records.aggregate(
+      [
+        { '$match': { isSch: { '$ne': true } } },
+        {
+          '$group': {
+            _id      : { day   : { '$dayOfWeek': '$t' }, dj: '$dj' },
+            count    : { '$sum': 1 },
+            duration : { '$sum': '$duration' }
+          }
+        },
+      ]);
+  return AGGREGATE_CACHE.weekstats;
+}
+
+function get_months_stats() {
+  if (!AGGREGATE_CACHE.perMonth)
+    AGGREGATE_CACHE.perMonth = Records.aggregate(
+      [
+        { '$match': { isSch: { '$ne': true } } },
+        {
+          '$group': {
+            _id      : { y: { $year: '$t' },
+                         m: { $month: '$t' }},
+            count    : { '$sum': 1 },
+            duration : { '$sum': '$duration' }
+          },
+        },
+        {'$sort': {'_id.y': 1, '_id.m': 1}}
+      ]);
+  return AGGREGATE_CACHE.perMonth;
+}
+
 Meteor.methods({
   djnames : function () {
-    // TODO: cache this
-    return Stats.perDj.find().fetch();
+     return get_dj_stats();
   },
 
   'get-stats': function() {
-
     return {
-      perDj: Stats.perDj.find({}, {sort: {count: -1}}).fetch(),
+      perDj: get_dj_stats(),
+      perWeekDay: get_weekstats(),
+      perMonth: get_months_stats()
     };
   }
 });
