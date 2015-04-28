@@ -34,7 +34,10 @@ CommentController = RouteController.extend({
 Meteor.startup(function () {
 
   Router.route('/', function (){
-    this.redirect('records', {dj: "!all"});
+    this.redirect('stats');
+  });
+
+  Router.route('/stats', {
   });
 
   Router.route('/records/:dj', {

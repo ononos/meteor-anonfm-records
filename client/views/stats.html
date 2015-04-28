@@ -1,0 +1,39 @@
+<template name="stats">
+  {{#if isLoading}}
+    {{> loading}}
+  {{else}}
+    <h1>Добро пожаловать</h1>
+
+    <p>Здесь вы можете обмазаться записями радивы, перейдите на страничку <a href="{{pathFor route="records" dj="!all"}}">с записями</a></p>
+    <p>Ниже некоторая статистика</p>
+
+    <div id="time"></div>
+    <div id="djstats"></div>
+    <div id="weekstats"></div>
+    <div id="sourcestats"></div>
+    <hr />    
+    <h3>Список источников файлов</h3>
+    <p>
+      {{> sourceInfo }}
+    </p>
+  {{/if}}
+</template>
+
+<template name="sourceInfo">
+  <dl class="dl-horizontal">
+    {{#each sources}}
+      <dt>{{title}}</dt>
+      <dd>
+        {{#if removed}}
+          Removed
+        {{/if}}
+        <a target="_blank" href="{{url}}">{{url}}</a>.
+        Файлов: <strong>{{count}}</strong> общей продолжительнистю  <strong>{{duration}}</strong> часов. Обновление было получено {{timeAgo lastUpdated}}.
+        {{#if isAdmin}}
+          Сообщение &quot;<span class="text-info">{{updateMsg}}</span>&quot;.
+          Интервал &quot;<span class="text-info">{{updateInterval}}</span>&quot;.
+        {{/if}}
+      </dd>
+    {{/each}}
+  </dl> 
+</template>
