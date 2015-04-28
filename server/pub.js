@@ -132,7 +132,7 @@ Meteor.publish("core", function() {
 
   if (!isAdminById(this.userId)) {
     query.rm = {$ne: true};
-    options.fields = {url: 1, title: 1};
+    options.fields = {url: 1, title: 1, lastUpdated: 1};
   }
 
   Counts.publish(this, 'best',
@@ -148,8 +148,8 @@ Meteor.publish("core", function() {
 
 var AGGREGATE_CACHE = {};
 
-// clear cache each hour
-Meteor.setInterval(function() {  AGGREGATE_CACHE = {}; }, 3600000);
+// clear cache each day
+Meteor.setInterval(function() {  AGGREGATE_CACHE = {}; }, 24 * 3600000);
 
 // dj record count
 function get_dj_stats() {
@@ -164,24 +164,7 @@ function get_dj_stats() {
             duration : { '$sum': '$duration' }
           }
         },
-        {'$sort': {count: -1}}
-      ]);
-  return AGGREGATE_CACHE.djstats;
-}
-
-function get_dj_stats() {
-  if (!AGGREGATE_CACHE.djstats)
-    AGGREGATE_CACHE.djstats = Records.aggregate(
-      [
-        { '$match': { isSch: { '$ne': true } } },
-        {
-          '$group': {
-            _id      : '$dj',
-            count    : { '$sum': 1 },
-            duration : { '$sum': '$duration' }
-          }
-        },
-        {'$sort': {count: -1}}
+        {'$sort': {duration: -1}}
       ]);
   return AGGREGATE_CACHE.djstats;
 }
@@ -220,6 +203,30 @@ function get_months_stats() {
   return AGGREGATE_CACHE.perMonth;
 }
 
+
+function get_sources_stats() {
+  if (!AGGREGATE_CACHE.perSource) {
+    AGGREGATE_CACHE.perSource = Records.aggregate(
+      [
+        { '$match': { isSch: { '$ne': true } } },
+        { $unwind: '$sources'},
+        {
+          '$group': {
+            _id      : '$sources.id',
+            count    : { '$sum': 1 },
+            duration : { '$sum': '$duration' }
+          },
+        },
+      ]);
+    // replace ObjectID to meteor mongo id
+    AGGREGATE_CACHE.perSource = _.map(AGGREGATE_CACHE.perSource, function(it) {
+      it._id = new Mongo.ObjectID( '' + it._id );
+      return it;
+    });
+  }
+  return AGGREGATE_CACHE.perSource;
+}
+
 Meteor.methods({
   djnames : function () {
      return get_dj_stats();
@@ -229,7 +236,8 @@ Meteor.methods({
     return {
       perDj: get_dj_stats(),
       perWeekDay: get_weekstats(),
-      perMonth: get_months_stats()
+      perMonth: get_months_stats(),
+      perSource: get_sources_stats()
     };
   }
 });
