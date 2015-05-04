@@ -1,12 +1,12 @@
 // Accounts.validateLoginAttempt()
-Throttle.debug = false;
+
+Throttle.setMethodsAllowed(false);
+
 ThrottleAccounts.login('global', 20, 1000, 'Under Heavy Load - too many login attempts');
 ThrottleAccounts.login('connection', 8, 10000, 'Under Heavy Load - too many login attempts');
 
 // Accounts.validateNewUser()
 ThrottleAccounts.create('global', 10, 10000, 'Under Heavy Load - too many accounts created');
-
-Throttle._ensureIndex({key: 1});
 
 // If first user - that it became admin
 Accounts.onCreateUser(function(options, user) {
