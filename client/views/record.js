@@ -168,9 +168,13 @@ Template.social.helpers({
 
 Template.social.events({
   'click [data-action="toggle-like"]':
-  _.throttle(function()
+  _.debounce(function()
              {
+               var file = this.ctx.fname,
+                   liked = _.contains(getMyLikedRecords(), this.ctx.fname),
+                   msg = liked ? 'Лайк снят с' + file : 'Лайк установлен у ' + file;
+               Messages.success(msg);
                Meteor.call('toggle-like', this.ctx.fname, LOCAL_ID, Messages.error);
-             }, 500),
+             }, 1000, true),
   
 });
