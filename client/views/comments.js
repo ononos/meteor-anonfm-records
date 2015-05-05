@@ -14,10 +14,10 @@ Template.comment.events({
   },
 
   'click [data-action="unban"]':
-  _.throttle(function(e, t)
+  _.debounce(function(e, t)
              {
                Meteor.call("remove-bans", this.ip, mkBanUserIdSlug(this.userId, this.userTok), Messages.error);
-             }, 700),
+             }, 700, true),
 
   'click [data-action="ban"]': function(e, t) {
     t.showBanForm.set(!t.showBanForm.get());
@@ -66,7 +66,7 @@ Template.banCommentAuthor.events({
       expire: expire,
       reason: reason
     }, Messages.error);
-
+    Messages.info('User banned ' + userId_or_Tok + ' ' + ip);
     this.showBanFormVar.set(false); //hide form
   }
 });
@@ -107,6 +107,7 @@ Template.newComment.events({
       } else {
         t.find('form').reset();
         t.find('#preview').innerHTML = '';
+        Messages.success('Комент добавлен');
       }
     });
   },
