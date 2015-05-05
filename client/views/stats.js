@@ -42,7 +42,6 @@ Template.sourceInfo.helpers({
         return [];
 
     var perSource = CACHED_STATS_DATA.get().perSource;
-    console.log('perSource', perSource);
     perSource = _.filter(perSource, function(it) {
       return Sources.findOne(it._id, {reactive: false});
     });

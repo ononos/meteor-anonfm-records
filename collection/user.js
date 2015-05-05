@@ -70,7 +70,6 @@ if (Meteor.isClient)
     // get token
     LOCAL_ID = localStorage.getItem('my-id');
     Meteor.call('token', LOCAL_ID, function(err, newToken) {
-      console.log('token', err, newToken);
       if (!err && newToken) {
           LOCAL_ID = newToken;
           localStorage.setItem('my-id', LOCAL_ID);

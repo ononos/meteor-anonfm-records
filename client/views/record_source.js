@@ -103,7 +103,6 @@ Template.recordSources.events({
       if (uppod && curUrl === previewFileUrl) {
         uppod.Play();
         } else {
-          console.log('previewFile', previewFileUrl);
           PlayUrl(this._id, 'preview', previewFileUrl);
         }
     }
