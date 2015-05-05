@@ -62,10 +62,12 @@ UserTokens = new Meteor.Collection('tokens');
 UserTokens.attachSchema(tokens);
 
 LOCAL_ID = undefined;
+PREVIEW_URL = undefined;
 
 // for not registered users create token and save it to localStorage
 if (Meteor.isClient)
   Meteor.startup(function(){
+    // get token
     LOCAL_ID = localStorage.getItem('my-id');
     if(!LOCAL_ID) {
       Meteor.call('gen-token', function(err, result) {
@@ -79,4 +81,12 @@ if (Meteor.isClient)
     }
     if (LOCAL_ID)
       Meteor.subscribe('currentToken', LOCAL_ID);
+
+    // get preview url
+    Meteor.call('get-preview-url', function(err, res) {
+      if (err)
+        Messages.error(err);
+      else
+        PREVIEW_URL = res;
+    });
   });

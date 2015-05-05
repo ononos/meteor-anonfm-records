@@ -1,5 +1,17 @@
 <template name="recordSources">
   <span class="sources">
+    {{#if preview}}
+      <span class="source">
+        {{#if plaingPreview}}
+          <i data-action="pausePreview" class="play-btn fa fa-fw fa-pause"></i>
+        {{else}}
+          <i data-action="playPreview" class="play-btn fa fa-fw fa-play"></i>
+        {{/if}}
+        <span class="source-url" title="Listen record preview">
+          [Preview]
+        </span>
+      </span>
+    {{/if}}
     {{#each sources}}
       {{#unless rm}}
         {{>recordSourceItem}}

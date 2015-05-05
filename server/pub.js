@@ -243,5 +243,12 @@ Meteor.methods({
       perMonth: get_months_stats(),
       perSource: get_sources_stats()
     };
+  },
+
+  'get-preview-url': function() {
+    var p = process.env.PREVIEW_URL;
+    if (p && p.slice(-1) !== '/')
+      p += '/';
+    return p;
   }
 });
