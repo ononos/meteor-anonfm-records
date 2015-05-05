@@ -18,7 +18,7 @@ Accounts.onCreateUser(function(options, user) {
 });
 
 Meteor.startup(function () {
-  Accounts.emailTemplates.from = 'Архив Радио Анонимус <no-reply@ononos.tk>';
+  Accounts.emailTemplates.from = 'Anonfm Archive <no-reply@ononos.tk>';
 });
 
 // Helper.
