@@ -22,7 +22,7 @@ Meteor.startup(function () {
 });
 
 // Helper.
-// return token UserTokens record or null if not found and not ready
+// return token UserTokens record or null if not found and not old enough
 function getUserFromTokenAndCheck(userToken) {
   if (_.isUndefined(userToken))
     return false;
