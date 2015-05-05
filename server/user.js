@@ -17,6 +17,10 @@ Accounts.onCreateUser(function(options, user) {
   return user;
 });
 
+Meteor.startup(function () {
+  Accounts.emailTemplates.from = 'Архив Радио Анонимус <no-reply@ononos.tk>';
+});
+
 // Helper.
 // return token UserTokens record or null if not found and not ready
 function getUserFromTokenAndCheck(userToken) {
