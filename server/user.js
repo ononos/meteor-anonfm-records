@@ -120,12 +120,6 @@ Meteor.publish('bans', function(userData) {
   if (!isAdminById(this.userId)) {
     return [];
   }
-  console.log('ips', userData.ips);
-  console.log('join:', {$or:
-                    [
-                      {ip: {$in: userData.ips}},
-                      {userId: {$in: userData.userIds}}
-                    ]});
   return Bans.find({$or:
                     [
                       {ip: {$in: _.unique(userData.ips)}},
@@ -136,8 +130,10 @@ Meteor.publish('bans', function(userData) {
 // user related methods
 Meteor.methods({
   // create token
-  'gen-token': function() {
-    if (!Throttle.checkThenSet('gen-token/' + this.connection.id, 2, 60000)) {
+  'token': function(oldToken) {
+    var ip = headers.methodClientIP(this);
+
+    if (!Throttle.checkThenSet('gen-token/' + ip, 2, 60000)) {
       throw new Meteor.Error(500, 'Under Heavy load');
     }
 
@@ -146,21 +142,19 @@ Meteor.methods({
     }
 
     var now = new Date();
-    return UserTokens.insert({created: now, lastUse: now});
-  },
-
-  // keep alive this token, update lastUse date
-  'refresh-token': function(tok) {
-    check(tok, String);
-    if (!Throttle.checkThenSet('update-tok/' + this.connection.id, 1, 60000)) {
-      throw new Meteor.Error(500, 'Under Heavy load');
+    if (!_.isUndefined(oldToken) && UserTokens.update({_id: oldToken}, {$set: {lastUse: now}})) {
+      return false;
+    } else {
+      return UserTokens.insert({created: now, lastUse: now});
     }
-
-    UserTokens.update(tok, {$set: {lastUse: new Date()}});
   },
 
   'remove-bans': function(ip, userIdSlug) {
+    if (!isAdminById(this.userId))
+      return;
+
     console.log('remove-bans', ip, userIdSlug);
+
     if (_.isString(ip))
       Bans.remove({ip: ip});
 

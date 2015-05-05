@@ -69,18 +69,14 @@ if (Meteor.isClient)
   Meteor.startup(function(){
     // get token
     LOCAL_ID = localStorage.getItem('my-id');
-    if(!LOCAL_ID) {
-      Meteor.call('gen-token', function(err, result) {
-        if (!err) {
-          LOCAL_ID = result;
+    Meteor.call('token', LOCAL_ID, function(err, newToken) {
+      console.log('token', err, newToken);
+      if (!err && newToken) {
+          LOCAL_ID = newToken;
           localStorage.setItem('my-id', LOCAL_ID);
-        }
-      });
-    } else {
-      Meteor.call('refresh-token', LOCAL_ID);
-    }
-    if (LOCAL_ID)
+      }
       Meteor.subscribe('currentToken', LOCAL_ID);
+    });     
 
     // get preview url
     Meteor.call('get-preview-url', function(err, res) {
