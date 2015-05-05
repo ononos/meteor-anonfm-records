@@ -1,6 +1,8 @@
 var CACHED_STATS_DATA = ReactiveVar({});
 
 function toHours (n) { return Math.round(n / 360 ) / 10;}
+function toFixed2 (n) { return Math.round(n * 100 ) / 100;}
+function toMb (n) { return toFixed2( n / ( 1024 * 1024 ) ).toLocaleString();}
 
 function update_cache () {
   if (_.isEmpty(CACHED_STATS_DATA.get())) {
@@ -78,6 +80,7 @@ function draw_charts(data){
       perMonth = data.perMonth,
       perSource = data.perSource,
       totalRecordsCount = _.reduce(perDjData, function(memo, it) { return memo += it.count; }, 0),
+      totalRecordsSize = _.reduce(perDjData, function(memo, it) { return memo += it.size; }, 0),
       totalRecordsDuration = toHours(_.reduce(perDjData, function(memo, it) { return memo += it.duration; }, 0));
 
   // show time line
@@ -87,7 +90,8 @@ function draw_charts(data){
       text: 'Записи помесячно',
     },
     subtitle: {
-      text: 'Всего <b>' + totalRecordsCount + '</b> файлов или <b>' + totalRecordsDuration + '</b> часов'
+      text: 'Всего <b>' + totalRecordsCount + '</b> файлов, <b>' +
+        toMb(totalRecordsSize) + ' Mb, </b> или <b>' + totalRecordsDuration + '</b> часов'
     },
     xAxis: {
       type: 'datetime',
@@ -220,9 +224,11 @@ function draw_charts(data){
             dj: it._id,
             y: 100 * toHours(it.duration) / total,
             duration: toHours(it.duration),
+            size: toMb(it.size),
             files: it.count
           };
         }),
+        otherSize: toMb(_.reduce(arr.slice(skip + len), function(memo, it) { return memo += it.size; }, 0)),
         otherDuration: toHours(_.reduce(arr.slice(skip + len), function(memo, it) { return memo += it.duration; }, 0)),
         otherFiles: _.reduce(arr.slice(skip + len), function(memo, it) { return memo += it.count; }, 0)
       };
@@ -231,11 +237,13 @@ function draw_charts(data){
         pieData = calcPieData(perDjData, 0, itemsPerPie, totalRecordsDuration),
         pieRootData = pieData.data,
         otherDuration = pieData.otherDuration,
+        otherSize = pieData.otherSize,
         otherFiles = pieData.otherFiles;
 
     pieRootData.push(
       { duration: otherDuration,
         files: otherFiles,
+        size: otherSize,
         dj: 'Остальные',
         drilldown: 'other-0',
         y: 100 * otherDuration / totalRecordsDuration});
@@ -248,6 +256,7 @@ function draw_charts(data){
       drillData.push({
         duration: temp.otherDuration,
         files: temp.otherFiles,
+        size: temp.otherSize,
         dj: 'Остальные',
         y: 100 * temp.otherDuration / totalRecordsDuration,
         drilldown: temp.otherDuration ? 'other-' + (k +1) : undefined
@@ -279,7 +288,7 @@ function draw_charts(data){
       },
       tooltip: {
         headerFormat: '<span style="font-size:11px">Записи</span><br/>',
-        pointFormat: '<span style="color:{point.color}">{point.dj}</span> {point.duration}часов, <b>{point.y:.2f}%</b><br/> Всего {point.files} файлов'
+        pointFormat: '<span style="color:{point.color}">{point.dj}</span> {point.duration}часов, <b>{point.y:.2f}%</b><br/> Всего {point.files} файлов в <b>{point.size}Mb</b>'
       },
 
       series: [{
@@ -325,6 +334,13 @@ function draw_charts(data){
             text: 'Файлов'
           },
           opposite: true
+        },
+        {
+          min: 0,
+          title: {
+            text: 'Размер'
+          },
+          opposite: true
         }
       ],
       series: [
@@ -341,6 +357,15 @@ function draw_charts(data){
           name: 'Файлы',
           data: _.pluck(perSource, 'count')
         },
+        {
+          yAxis: 2,
+          name: 'Размер, Мб',
+          data: _.chain(perSource)
+            .pluck('size')
+            .map(function(size) { return toFixed2(size / (1024 * 1024));})
+            .value()
+        },
+
       ]
     });
   }, 4000);

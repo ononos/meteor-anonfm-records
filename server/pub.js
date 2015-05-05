@@ -161,6 +161,7 @@ function get_dj_stats() {
           '$group': {
             _id      : '$dj',
             count    : { '$sum': 1 },
+            size     : { '$sum': '$size' },
             duration : { '$sum': '$duration' }
           }
         },
@@ -178,6 +179,7 @@ function get_weekstats() {
           '$group': {
             _id      : { day   : { '$dayOfWeek': '$t' }, dj: '$dj' },
             count    : { '$sum': 1 },
+            size     : { '$sum': '$size' },
             duration : { '$sum': '$duration' }
           }
         },
@@ -195,6 +197,7 @@ function get_months_stats() {
             _id      : { y: { $year: '$t' },
                          m: { $month: '$t' }},
             count    : { '$sum': 1 },
+            size     : { '$sum': '$size' },
             duration : { '$sum': '$duration' }
           },
         },
@@ -214,6 +217,7 @@ function get_sources_stats() {
           '$group': {
             _id      : '$sources.id',
             count    : { '$sum': 1 },
+            size     : { '$sum': '$size' },
             duration : { '$sum': '$duration' }
           },
         },
