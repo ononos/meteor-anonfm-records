@@ -353,8 +353,10 @@ function createElement(tag, attribs, styles, parent, nopad) {
  */
 function extendClass(parent, members) {
 	var object = function () { return UNDEFINED; };
-	object.prototype = new parent();
-	extend(object.prototype, members);
+        if (typeof parent !== "undefined") {
+	  object.prototype = new parent();
+	  extend(object.prototype, members);
+        }
 	return object;
 }
 
