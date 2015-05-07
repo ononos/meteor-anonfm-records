@@ -148,8 +148,8 @@ Meteor.publish("core", function() {
 
 var AGGREGATE_CACHE = {};
 
-// clear cache each day
-Meteor.setInterval(function() {  AGGREGATE_CACHE = {}; }, 24 * 3600000);
+// clear cache each 3 hours
+Meteor.setInterval(function() {  AGGREGATE_CACHE = {}; }, 3 * 3600000);
 
 // dj record count
 function get_dj_stats() {
