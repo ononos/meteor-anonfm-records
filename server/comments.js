@@ -45,6 +45,9 @@ Meteor.methods({
     check(nick, String);
     check(text, String);
 
+    if (nick.length > 25)
+      throw new Meteor.Error(400, 'Ник уж совсем не комильфо');
+
     if (text.length < 3)
       throw new Meteor.Error(400, 'Сообщение пустое');
 
