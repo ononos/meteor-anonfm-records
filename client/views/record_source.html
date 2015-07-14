@@ -15,6 +15,12 @@
     {{#each sources}}
       {{#unless rm}}
         {{>recordSourceItem}}
+      {{else}}
+        {{#if isAdmin}}
+        <span class="removed-from-source">
+          {{>recordSourceItem}}
+        </span>
+        {{/if}}
       {{/unless}}
     {{/each}}
   </span>
